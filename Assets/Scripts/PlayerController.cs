@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour {
     private float moveDelay = 0;
     //public float jumping;
     //public float movingHorizontal;
+    public float speed = 10;
 
 
     // Use this for initialization
@@ -34,6 +35,10 @@ public class PlayerController : MonoBehaviour {
         float jumping = Input.GetAxis("Jump"); 
         float movingHorizontal = Input.GetAxisRaw("Horizontal");
         float sliding = Input.GetAxis("Vertical");
+
+        Vector3 pos = transform.position;
+        pos.x += speed * Time.deltaTime;
+        transform.position = pos;
         
         if(jumping > 0)
         {
