@@ -6,18 +6,18 @@ public class PlayerController : MonoBehaviour {
 
     private bool moveLeft = false;
     private bool moveRight = false;
-    private float jumpCap = 1;
-    private float leftLane = -3;
-    private float centerLane = 0;
-    private float rightLane = 3;
+    private float jumpCap = 3;
+    private int lane = 0;
     private bool isSliding = false;
     private bool isJumping = false;
-    private const float Move = 3;
-    private float timer = 0;
+    private float jumpTimer = 0;
+    private float slideTimer = 0;
     private float moveDelay = 0;
-    //public float jumping;
-    //public float movingHorizontal;
     public float speed = 10;
+    public float gravity = 10;
+    public bool stopGravity = false;
+    private float addedMoveDelay = 0;
+    //private Vector3
 
 
     // Use this for initialization
@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        timer = 60 * Time.deltaTime;
+        //timer = 60 * Time.deltaTime;
         //print(timer);
 
         float jumping = Input.GetAxis("Jump"); 
@@ -39,9 +39,18 @@ public class PlayerController : MonoBehaviour {
         Vector3 pos = transform.position;
         pos.x += speed * Time.deltaTime;
         transform.position = pos;
+        if(stopGravity == false)
+        {
+            pos.y -= gravity * Time.deltaTime;
+            transform.position = pos;
+        }
+        
         
         if(jumping > 0)
         {
+            print(jumping);
+            jumpTimer = jumping * Time.deltaTime;
+            //print(jumpTimer);
             Jump();
         }
 
@@ -58,31 +67,36 @@ public class PlayerController : MonoBehaviour {
 
            // SwapLanes();
         }
-        print(moveLeft);
-        print(moveRight);
+        //print(moveLeft);
+        //print(moveRight);
 
         if (moveRight == true || moveLeft == true)
         {
             SwapLanes();
-            moveDelay = .5f;
+            moveDelay = .5f + addedMoveDelay;
         }
 
         if (sliding < 0)
         {
             isSliding = true;
+            slideTimer += .2f;
             Slide();
         }
         else
         {
             isSliding = false;
+            GetComponent<AABB>().halfSize.y = .5f;
+            speed = 5;
+            slideTimer = 0;
+            
         }
 
         if(transform.localPosition.y >= jumpCap)
         {
-            transform.localPosition = new Vector3(0, jumpCap);
+            transform.localPosition = new Vector3(transform.localPosition.x, jumpCap);
         }
 
-        if(transform.localPosition.z >= 3.1)
+        /*if(transform.localPosition.z >= 3.1)
         {
             //transform.localPosition = new Vector3(0, 0, rightLane);
             transform.Translate(0, 0, leftLane);
@@ -93,26 +107,39 @@ public class PlayerController : MonoBehaviour {
             //transform.localPosition = new Vector3(0, 0, leftLane);
             transform.Translate(0, 0, rightLane);
             print("LOCKED TO THE LEFT!!!!!!!!!!!!!!");
-        }
+        }*/
 
         if(isSliding == false)
         {
             transform.localScale = Vector3.one;
         }
 
-        print(transform.localPosition);
+        //print(transform.localPosition);
         
         if(moveDelay > 0)
         {
             moveDelay = moveDelay - Time.deltaTime;
         }
-        print(moveDelay);
+
+        
+
+        if(lane > 1)
+        {
+            lane--;
+        }
+        if (lane < -1)
+        {
+            lane++;
+        }
+        moveLane();
+        //print(speed);
+        //print(moveDelay);
 	}
 
     void Jump()
     {
         print("Jumping");
-        transform.Translate(new Vector3(0, 0 + Time.deltaTime, 0));
+        transform.Translate(new Vector3(0, (jumpTimer * 5), 0));
 
     }
 
@@ -121,42 +148,46 @@ public class PlayerController : MonoBehaviour {
         print("Sliding");
         
         transform.localScale = new Vector3(transform.localScale.x, .5f, transform.localScale.z);
+        if(speed > 3)
+        {
+            speed = 10 - slideTimer * 3 * Time.deltaTime;
+        }
+        
+        GetComponent<AABB>().halfSize.y = .25f;
+
     }
 
     void SwapLanes()
     {
-        float moveAmount = 0;
-        if (moveRight == true)
-        {
-            print("Move Right");
-            /*moveAmount =+ .01f;
-            transform.Translate(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z + moveAmount);
-            if(transform.localPosition.z >= 3)
-            {
-                moveRight = false;
-                moveAmount = 0;
-            }*/
-            transform.Translate(transform.localPosition.x, transform.localPosition.y, rightLane);
-            moveRight = false;
-            //moveDelay = 10;
 
-        }
-        if (moveLeft == true)
+        if(moveRight == true)
         {
-            print("Move Left");
-            /*moveAmount =- .01f;
-            transform.Translate(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z + moveAmount);
-            if(transform.localPosition.z <= -3)
-            {
-                moveLeft = false;
-                moveAmount = 0;
-            }*/
-            transform.Translate(transform.localPosition.x, transform.localPosition.y, leftLane);
+            lane--;
+            addedMoveDelay += .1f;
+            moveRight = false;
+        }
+        if(moveLeft == true)
+        {
+            lane++;
+            addedMoveDelay += .1f;
             moveLeft = false;
-            //moveDelay = 10;
         }
 
         //print(moveAmount);
+    }
+
+    void moveLane()
+    {
+        if(lane == -1)
+        {
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -3);
+        } else if(lane == 0)
+        {
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, 0);
+        } else
+        {
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, 3);
+        }
     }
 
 }

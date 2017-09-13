@@ -20,8 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4107044193814226}
   - component: {fileID: 33480147051180652}
-  - component: {fileID: 65824541729565640}
   - component: {fileID: 23483808489983360}
+  - component: {fileID: 114465674824168432}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -52,6 +52,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4600562101833364}
+  - component: {fileID: 114176171969613640}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -139,15 +140,27 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1217002321244030}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &65824541729565640
-BoxCollider:
+--- !u!114 &114176171969613640
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1869230247956440}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a2664432a9361640bc5d8f16de8c1e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  halfSize: {x: 10, y: 0, z: 5}
+--- !u!114 &114465674824168432
+MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1217002321244030}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a2664432a9361640bc5d8f16de8c1e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  halfSize: {x: 10, y: 0.5, z: 10}

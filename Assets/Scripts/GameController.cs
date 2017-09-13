@@ -19,10 +19,11 @@ public class GameController : MonoBehaviour {
 
         if(chunks.Count > 0)
         {
-            if(player.position.z - chunks[0].transform.position.z > 13)
+            if(player.position.x - chunks[0].transform.position.x > 25)
             {
                 Destroy(chunks[0]);
                 chunks.RemoveAt(0);
+                CollisionManager.groundTile.RemoveAt(0);
             }
         }
 		while(chunks.Count < 5)
@@ -34,6 +35,9 @@ public class GameController : MonoBehaviour {
             }
             GameObject obj = Instantiate(ground, position, Quaternion.identity);
             chunks.Add(obj);
+            AABB groundAABB = obj.GetComponent<AABB>();
+            CollisionManager.groundTile.Add(groundAABB);
+
         }
 	}
 }

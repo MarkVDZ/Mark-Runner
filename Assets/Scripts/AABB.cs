@@ -10,11 +10,6 @@ public class AABB : MonoBehaviour {
 
     Vector3 min = Vector3.zero;
     Vector3 max = Vector3.zero;
-
-	// Use this for initialization
-	void Start () {
-		
-	}
 	
 	// Update is called once per frame
 	void Update () {
