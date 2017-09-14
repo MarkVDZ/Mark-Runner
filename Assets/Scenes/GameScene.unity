@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -138,6 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   halfSize: {x: 0.5, y: 1, z: 1.5}
+  offset: {x: 0, y: 0, z: 0}
 --- !u!23 &18665268
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -412,6 +413,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   halfSize: {x: 0.5, y: 0.5, z: 0.5}
+  offset: {x: 0, y: 0, z: 0}
 --- !u!33 &1146264209
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -446,6 +448,8 @@ MonoBehaviour:
   speed: 10
   gravity: 1
   stopGravity: 0
+  addedMoveDelay: 0
+  life: 1
 --- !u!1 &1209077538
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,24 +573,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 114176171969613640, guid: 5f5e80a9cf4c07141a79d9dcf97e55dc,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 114465674824168432, guid: 5f5e80a9cf4c07141a79d9dcf97e55dc,
         type: 2}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114176171969613640, guid: 5f5e80a9cf4c07141a79d9dcf97e55dc,
-        type: 2}
-      propertyPath: halfSize.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4107044193814226, guid: 5f5e80a9cf4c07141a79d9dcf97e55dc, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
+      propertyPath: halfSize.z
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5f5e80a9cf4c07141a79d9dcf97e55dc, type: 2}

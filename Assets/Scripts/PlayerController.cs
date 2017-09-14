@@ -191,4 +191,28 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    //Apply a collision "fix" to prevent collision detection
+    //param fix How far to move the player
+
+    public void ApplyFix(Vector3 fix)
+    {
+
+        transform.position += fix;
+        GetComponent<AABB>().calcEdges();
+
+        if(fix.x != 0)
+        {
+            //zero x velocity
+        }
+        if (fix.y != 0)
+        {
+            //zero x velocity
+        }
+        if (fix.z != 0)
+        {
+            //zero x velocity
+        }
+
+    }
+
 }

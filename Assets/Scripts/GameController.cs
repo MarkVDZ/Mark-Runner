@@ -23,7 +23,7 @@ public class GameController : MonoBehaviour {
             {
                 Destroy(chunks[0]);
                 chunks.RemoveAt(0);
-                CollisionManager.groundTile.RemoveAt(0);
+                CollisionManager.groundTiles.RemoveAt(0);
             }
         }
 		while(chunks.Count < 5)
@@ -36,7 +36,7 @@ public class GameController : MonoBehaviour {
             GameObject obj = Instantiate(ground, position, Quaternion.identity);
             chunks.Add(obj);
             AABB groundAABB = obj.GetComponent<AABB>();
-            CollisionManager.groundTile.Add(groundAABB);
+            CollisionManager.groundTiles.Add(groundAABB);
 
         }
 	}

@@ -10,13 +10,15 @@ public class AABB : MonoBehaviour {
 
     Vector3 min = Vector3.zero;
     Vector3 max = Vector3.zero;
+
+    public Vector3 offset;
 	
 	// Update is called once per frame
 	void Update () {
         calcEdges();
 	}
 
-    void calcEdges()
+    public void calcEdges()
     {
         min = transform.position - halfSize;
         max = transform.position + halfSize;
@@ -38,5 +40,52 @@ public class AABB : MonoBehaviour {
             return true;
         }
         return true;
+    }
+
+    //How far to move this AABB to correct its overlap with other AABB
+
+    public Vector3 CalculateOverlapFix(AABB other)
+    {
+        
+        float moveRight = other.max.x - min.x;
+        float moveUp = other.max.y - min.y;
+        float moveForward = other.max.z - min.z;
+
+        float moveLeft = other.min.x - max.x;
+        float moveDown = other.min.y - max.y;
+        float moveBack = other.min.z - max.z;
+
+        Vector3 solution;
+    
+        solution.z = Mathf.Abs(moveForward) < Mathf.Abs(moveBack) ? moveForward : moveBack;
+        solution.y = Mathf.Abs(moveUp) < Mathf.Abs(moveDown) ? moveUp : moveDown;
+        solution.x = Mathf.Abs(moveRight) < Mathf.Abs(moveLeft) ? moveRight : moveLeft;
+
+        if (Mathf.Abs(solution.x) < Mathf.Abs(solution.z) && Mathf.Abs(solution.x) < Mathf.Abs(solution.y))
+        {
+            solution.z = 0;
+            solution.y = 0;
+
+        }
+
+        if (Mathf.Abs(solution.y) < Mathf.Abs(solution.x) && Mathf.Abs(solution.y) < Mathf.Abs(solution.z))
+        {
+            solution.x = 0;
+            solution.z = 0;
+
+        }
+        
+        if (Mathf.Abs(solution.z) < Mathf.Abs(solution.x) && Mathf.Abs(solution.z) < Mathf.Abs(solution.y))
+        {
+            solution.x = 0;
+            solution.y = 0;
+
+        }
+        //if (Mathf.Abs(solution.z) > Mathf.Abs(solution.x) || Mathf.Abs(solution.z) > Mathf.Abs(solution.y)) solution.z = 0;
+        //if (Mathf.Abs(solution.y) > Mathf.Abs(solution.x) || Mathf.Abs(solution.y) > Mathf.Abs(solution.z)) solution.y = 0;
+        //if (Mathf.Abs(solution.x) > Mathf.Abs(solution.y) || Mathf.Abs(solution.x) > Mathf.Abs(solution.z)) solution.x = 0;
+
+        return solution;
+
     }
 }
