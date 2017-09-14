@@ -6,6 +6,8 @@ public class CollisionManager : MonoBehaviour {
 
     AABB player;
     static public List<AABB> groundTile = new List<AABB>();
+    static public List<AABB> powerups = new List<AABB>();
+    static public List<AABB> walls = new List<AABB>();
     public AABB wall;
 
 

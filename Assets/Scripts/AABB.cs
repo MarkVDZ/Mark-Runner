@@ -24,15 +24,19 @@ public class AABB : MonoBehaviour {
 
     public bool checkOverlap(AABB other)
     {
-        if (min.x > other.max.x) return false;
-        if (max.x < other.min.x) return false;
+        if(other != null)
+        {
+            if (min.x > other.max.x) return false;
+            if (max.x < other.min.x) return false;
 
-        if (min.y > other.max.y) return false;
-        if (max.y < other.min.y) return false;
+            if (min.y > other.max.y) return false;
+            if (max.y < other.min.y) return false;
 
-        if (min.z > other.max.z) return false;
-        if (max.z < other.min.z) return false;
+            if (min.z > other.max.z) return false;
+            if (max.z < other.min.z) return false;
 
+            return true;
+        }
         return true;
     }
 }

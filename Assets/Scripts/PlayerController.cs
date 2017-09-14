@@ -16,7 +16,8 @@ public class PlayerController : MonoBehaviour {
     public float speed = 10;
     public float gravity = 10;
     public bool stopGravity = false;
-    private float addedMoveDelay = 0;
+    public float addedMoveDelay = 0;
+    public float life = 1;
     //private Vector3
 
 
