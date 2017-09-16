@@ -8,6 +8,8 @@ public class CollisionManager : MonoBehaviour {
     static public List<AABB> groundTiles = new List<AABB>();
     static public List<AABB> powerups = new List<AABB>();
     static public List<AABB> walls = new List<AABB>();
+    //static public List<AABB> thowmps = new List<AABB>();
+    public AABB thump;
     public AABB wall;
 
 
@@ -21,8 +23,8 @@ public class CollisionManager : MonoBehaviour {
 	void LateUpdate () {
         //print(wall);
         DoCollisionDetectionGround();
-        //DoCollisionDetectionWall();
-
+        DoCollisionDetectionWall();
+        DoCollisionDetectionThowmp();
 
     }
 
@@ -32,6 +34,8 @@ public class CollisionManager : MonoBehaviour {
         foreach (AABB ground in groundTiles)
         {
 
+            
+
             bool resultGround = player.checkOverlap(ground);
             //print(resultGround);
             if(resultGround == true)
@@ -40,16 +44,28 @@ public class CollisionManager : MonoBehaviour {
                 //player.GetComponent<PlayerController>().stopGravity = true;
                 //player.GetComponent<MeshRenderer>().material.color = Color.black;
                 Vector3 fix = player.CalculateOverlapFix(ground);
-                print(fix);
+                //print(fix);
                 player.GetComponent<PlayerController>().ApplyFix(fix);
 
-                return;
+                //return;
             }
             else
             {
                 player.GetComponent<PlayerController>().stopGravity = false;
                 //player.GetComponent<MeshRenderer>().material.color = Color.blue;
             }
+
+            bool resultThowmp = thump.checkOverlap(ground);
+
+            if (resultThowmp == true)
+            {
+                print("COLLIDE!!!");
+                Vector3 fix = thump.CalculateOverlapFix(ground);
+                //print(fix);
+                //player.GetComponent<PlayerController>().ApplyFix(fix);
+                thump.GetComponent<Osilate>().isMovingDown = false;
+            }
+
         }
 
 
@@ -59,10 +75,22 @@ public class CollisionManager : MonoBehaviour {
     void DoCollisionDetectionWall()
     {
         bool resultWall = player.checkOverlap(wall);
-        print(resultWall);
+        //print(resultWall);
         if (resultWall == true)
         {
             player.GetComponent<PlayerController>().speed = 0;
         }
+    }
+
+    void DoCollisionDetectionThowmp()
+    {
+        bool resultWall = player.checkOverlap(thump);
+        //print(resultWall);
+        if (resultWall == true)
+        {
+            player.GetComponent<PlayerController>().speed = 0;
+        }
+
+
     }
 }

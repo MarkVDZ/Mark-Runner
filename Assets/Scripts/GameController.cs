@@ -5,10 +5,11 @@ using UnityEngine;
 public class GameController : MonoBehaviour {
 
     public GameObject ground;
+    public GameObject wall;
     public Transform player;
 
     List<GameObject> chunks = new List<GameObject>();
-
+    List<GameObject> walls = new List<GameObject>();
 	// Use this for initialization
 	void Start () {
 		
@@ -38,6 +39,14 @@ public class GameController : MonoBehaviour {
             AABB groundAABB = obj.GetComponent<AABB>();
             CollisionManager.groundTiles.Add(groundAABB);
 
+            Vector3 wallPos = Vector3.zero;
+
+            wallPos = chunks[chunks.Count - 1].transform.Find("ObsSpwanPoint").position;
+            GameObject objWall = Instantiate(wall, wallPos, Quaternion.identity);
+            walls.Add(objWall);
+
         }
+
+        
 	}
 }

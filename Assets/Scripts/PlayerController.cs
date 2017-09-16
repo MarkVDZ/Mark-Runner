@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour {
         float sliding = Input.GetAxis("Vertical");
 
         Vector3 pos = transform.position;
-        pos.x += speed * Time.deltaTime;
+        //pos.x += speed * Time.deltaTime;
         transform.position = pos;
         if(stopGravity == false)
         {
