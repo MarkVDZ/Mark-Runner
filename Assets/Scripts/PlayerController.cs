@@ -13,11 +13,14 @@ public class PlayerController : MonoBehaviour {
     private float jumpTimer = 0;
     private float slideTimer = 0;
     private float moveDelay = 0;
-    public float speed = 10;
-    public float gravity = 10;
+    public float velX = 10;
+    public float velY = 0;
+    public float gravity = 60;
     public bool stopGravity = false;
     public float addedMoveDelay = 0;
     public float life = 1;
+    float GRAVITY = 0;
+    Vector3 pos;
     //private Vector3
 
 
@@ -37,22 +40,28 @@ public class PlayerController : MonoBehaviour {
         float movingHorizontal = Input.GetAxisRaw("Horizontal");
         float sliding = Input.GetAxis("Vertical");
 
-        Vector3 pos = transform.position;
-        //pos.x += speed * Time.deltaTime;
-        transform.position = pos;
-        if(stopGravity == false)
+        pos = transform.position;
+        //pos.x += velX * Time.deltaTime;
+        //transform.position = pos;
+        if (stopGravity == false)
         {
-            pos.y -= gravity * Time.deltaTime;
+            float accY = gravity * Time.deltaTime;
+            GRAVITY = (gravity * Time.deltaTime) * 2;
+            //print(GRAVITY);
+            pos.y += velY - GRAVITY;// gravity * Time.deltaTime;
             transform.position = pos;
         }
-        
-        
-        if(jumping > 0)
+
+        if (jumping > 0 && jumpTimer < .4f)
         {
-            print(jumping);
-            jumpTimer = jumping * Time.deltaTime;
+            //print(jumping);
+            jumpTimer += jumping * Time.deltaTime;
             //print(jumpTimer);
             Jump();
+        }
+        else
+        {
+            velY = 0;
         }
 
         if (movingHorizontal > 0 && moveLeft == false && moveRight == false && moveDelay <= 0) {
@@ -87,12 +96,12 @@ public class PlayerController : MonoBehaviour {
         {
             isSliding = false;
             GetComponent<AABB>().halfSize.y = .5f;
-            speed = 5;
+            velX = 5;
             slideTimer = 0;
             
         }
 
-        if(transform.localPosition.y >= jumpCap)
+        if(transform.position.y >= jumpCap)
         {
             transform.localPosition = new Vector3(transform.localPosition.x, jumpCap);
         }
@@ -133,25 +142,50 @@ public class PlayerController : MonoBehaviour {
             lane++;
         }
         moveLane();
-        //print(speed);
+        //print(velX);
         //print(moveDelay);
-	}
+        //pos.x += velX * Time.deltaTime;
+        //transform.position = pos;
+        /*if (stopGravity == false)
+        {
+            float accY = gravity * Time.deltaTime;
+            //GRAVITY = (gravity * Time.deltaTime) * 2;
+            //print(GRAVITY);
+            //pos.y += velY - GRAVITY;// gravity * Time.deltaTime;
+            velY = accY;
+            print(velY);
+            pos.y = velY;
+            print(velY);
+            //transform.position = pos;
+        }*/
+
+        
+
+        //transform.position = pos;
+    }
 
     void Jump()
     {
         print("Jumping");
-        transform.Translate(new Vector3(0, (jumpTimer * 5), 0));
+        //transform.Translate(new Vector3(0, (jumpTimer * 5), 0));
+        velY += 10 * Time.deltaTime;
+        pos.y = velY; 
 
     }
 
     void Slide()
     {
         print("Sliding");
-        
+
+        print(slideTimer);
         transform.localScale = new Vector3(transform.localScale.x, .5f, transform.localScale.z);
-        if(speed > 3)
+        if(velX > 3)
         {
-            speed = 10 - slideTimer * 3 * Time.deltaTime;
+            velX = 10;// - slideTimer;
+            if(slideTimer >= 5)
+            {
+                velX -= (slideTimer * .5f);
+            }
         }
         
         GetComponent<AABB>().halfSize.y = .25f;
@@ -203,14 +237,24 @@ public class PlayerController : MonoBehaviour {
         if(fix.x != 0)
         {
             //zero x velocity
+            //pos.x = 0;
         }
         if (fix.y != 0)
         {
-            //zero x velocity
+            //zero y velocity
+            if(isJumping != true)
+            {
+                GRAVITY = 0;
+                //velY = 0;
+                jumpTimer = 0;
+            }
+            
+            //pos.y = 0;
         }
         if (fix.z != 0)
         {
-            //zero x velocity
+            //zero z velocity
+
         }
 
     }

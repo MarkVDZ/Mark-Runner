@@ -2,29 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollisionManager : MonoBehaviour {
+public class CollisionManager : MonoBehaviour
+{
 
     AABB player;
     static public List<AABB> groundTiles = new List<AABB>();
     static public List<AABB> powerups = new List<AABB>();
     static public List<AABB> walls = new List<AABB>();
-    //static public List<AABB> thowmps = new List<AABB>();
+    static public List<AABB> thowmps = new List<AABB>();
+    static public List<AABB> lavas = new List<AABB>();
+    static public List<AABB> mines = new List<AABB>();
     public AABB thump;
     public AABB wall;
+    public AABB powerup;
 
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         player = GameObject.Find("Player").GetComponent<AABB>();
         //wall = GameObject.Find("Wall").GetComponent<AABB>();
     }
-	
-	// Update is called once per frame
-	void LateUpdate () {
+
+    // Update is called once per frame
+    void LateUpdate()
+    {
         //print(wall);
         DoCollisionDetectionGround();
         DoCollisionDetectionWall();
         DoCollisionDetectionThowmp();
+        DoCollisionDetectionLava();
+        DoCollisionDetectionMine();
+        DoCollisionDetectionPowerup();
 
     }
 
@@ -33,29 +42,34 @@ public class CollisionManager : MonoBehaviour {
 
         foreach (AABB ground in groundTiles)
         {
-
-            
-
             bool resultGround = player.checkOverlap(ground);
             //print(resultGround);
-            if(resultGround == true)
+            if (resultGround == true)
             {
-                //player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 5 * Time.deltaTime, player.transform.position.z);
-                //player.GetComponent<PlayerController>().stopGravity = true;
-                //player.GetComponent<MeshRenderer>().material.color = Color.black;
                 Vector3 fix = player.CalculateOverlapFix(ground);
                 //print(fix);
                 player.GetComponent<PlayerController>().ApplyFix(fix);
 
-                //return;
             }
-            else
+            /*else
             {
                 player.GetComponent<PlayerController>().stopGravity = false;
                 //player.GetComponent<MeshRenderer>().material.color = Color.blue;
-            }
+            }*/
+            foreach (AABB thowmp in thowmps)
+            {
+                bool resultThowmp = thowmp.checkOverlap(ground);
 
-            bool resultThowmp = thump.checkOverlap(ground);
+                if (resultThowmp == true)
+                {
+                    //print("COLLIDE!!!");
+                    Vector3 fix = thowmp.CalculateOverlapFix(ground);
+                    //print(fix);
+                    //player.GetComponent<PlayerController>().ApplyFix(fix);
+                    thowmp.GetComponent<Osilate>().isMovingDown = false;
+                }
+            }
+            /*bool resultThowmp = thump.checkOverlap(ground);
 
             if (resultThowmp == true)
             {
@@ -64,33 +78,87 @@ public class CollisionManager : MonoBehaviour {
                 //print(fix);
                 //player.GetComponent<PlayerController>().ApplyFix(fix);
                 thump.GetComponent<Osilate>().isMovingDown = false;
-            }
+            }*/
 
         }
 
 
 
-        
+
     }
     void DoCollisionDetectionWall()
     {
-        bool resultWall = player.checkOverlap(wall);
+        foreach (AABB wall in walls)
+        {
+            bool resultWall = player.checkOverlap(wall);
+            if (resultWall == true)
+            {
+                player.GetComponent<PlayerController>().velX = 0;
+            }
+        }
+        /*bool resultWall = player.checkOverlap(wall);
         //print(resultWall);
         if (resultWall == true)
         {
-            player.GetComponent<PlayerController>().speed = 0;
-        }
+            player.GetComponent<PlayerController>().velX = 0;
+        }*/
     }
 
     void DoCollisionDetectionThowmp()
     {
-        bool resultWall = player.checkOverlap(thump);
-        //print(resultWall);
-        if (resultWall == true)
+        foreach (AABB thowmp in thowmps)
         {
-            player.GetComponent<PlayerController>().speed = 0;
+            bool resultThowmp = player.checkOverlap(thump);
+            //print(resultWall);
+            if (resultThowmp == true)
+            {
+                player.GetComponent<PlayerController>().velX = 0;
+            }
         }
+        /*bool resultThowmp = player.checkOverlap(thump);
+        //print(resultWall);
+        if (resultThowmp == true)
+        {
+            player.GetComponent<PlayerController>().velX = 0;
+        }*/
 
 
+    }
+
+    void DoCollisionDetectionLava()
+    {
+        foreach (AABB lava in lavas)
+        {
+            bool resultLava = player.checkOverlap(powerup);
+
+            if (resultLava == true)
+            {
+                player.GetComponent<PlayerController>().velX = 0;
+            }
+        }
+    }
+
+    void DoCollisionDetectionMine()
+    {
+
+    }
+
+    void DoCollisionDetectionPowerup()
+    {
+        foreach (AABB powerup in powerups)
+        {
+            bool resultPowerup = player.checkOverlap(powerup);
+
+            if (resultPowerup == true)
+            {
+                powerup.GetComponent<Powerup>().obtainPowerup();
+            }
+        }
+        /*bool resultPowerup = player.checkOverlap(powerup);
+        //print(resultWall);
+        if (resultPowerup == true)
+        {
+            powerup.GetComponent<Powerup>().obtainPowerup();
+        }*/
     }
 }

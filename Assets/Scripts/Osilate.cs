@@ -5,11 +5,11 @@ using UnityEngine;
 public class Osilate : MonoBehaviour {
 
     public bool isMovingDown = true;
-    float speed = 3;
+    public float speed;
 
 	// Use this for initialization
 	void Start () {
-		
+        speed = Random.Range(2, 7);
 	}
 	
 	// Update is called once per frame

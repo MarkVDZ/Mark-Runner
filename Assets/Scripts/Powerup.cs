@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Powerup : MonoBehaviour {
+public class Powerup : MonoBehaviour
+{
 
     PlayerController player;
     //public GameObject powerup;
@@ -11,10 +12,11 @@ public class Powerup : MonoBehaviour {
     public bool isResetPowerup = false;
     public static bool isGod = false;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         int powerPick = Random.Range(1, 10);
-        print(powerPick);
+        //print(powerPick);
         switch (powerPick)
         {
             case 1:
@@ -63,25 +65,47 @@ public class Powerup : MonoBehaviour {
             isLife = true;
             GetComponent<MeshRenderer>().material.color = Color.blue;
         }*/
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    public void obtainPowerup()
+    {
+        //print("PICK A POWERUP");
+        if (isLife == true)
+        {
+            extraLife();
+        }
+        else if (isGodPowerup == true)
+        {
+            godMode();
+        }
+        else if (isResetPowerup == true)
+        {
+            resetPlayerMovement();
+        }
+
+
+    }
 
     void resetPlayerMovement()
     {
-        if(player.addedMoveDelay > 0)
+        print("RESET MOVE!");
+        if (player.addedMoveDelay > 0)
         {
             player.addedMoveDelay = 0;
         }
-        
+
     }
 
     void extraLife()
     {
-        if(player.life < 1)
+        print("Gain LIFE!");
+        if (player.life < 1)
         {
             player.life += 1;
         }
@@ -89,6 +113,7 @@ public class Powerup : MonoBehaviour {
 
     void godMode()
     {
+        print("ARE GOD!");
         isGod = true;
     }
 }
