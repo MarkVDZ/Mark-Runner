@@ -46,24 +46,27 @@ public class GameController : MonoBehaviour {
             AABB groundAABB = obj.GetComponent<AABB>();
             CollisionManager.groundTiles.Add(groundAABB);
 
-            foreach(GameObject chunk in chunks)
-            {
+            //foreach(GameObject chunk in chunks)
+            //{
                 for(int i = 1; i < 9; i++)
                 {
                     allowSpawn = Random.Range(1, 10);
+                    //print("i" + i + " " + "Generated " + allowSpawn);
                     if(allowSpawn >= 3)
                     {
                         obsSpawn = Random.Range(1, 10);
-                        print(obsSpawn);
+                        //print("i" + i + " " + "Generated " + obsSpawn);
+                        //print(obsSpawn);
                         if (obsSpawn == 5)
                         {
                             Vector3 wallPos = Vector3.zero;
 
                             wallPos = chunks[chunks.Count - 1].transform.Find("ObsSpwanPoint" + i.ToString()).position;
+                            //wallPos = chunk.transform.Find("ObsSpwanPoint" + i.ToString()).position;
                             GameObject objWall = Instantiate(wall, wallPos, Quaternion.identity);
                             obsticles.Add(objWall);
                             AABB wallAABB = objWall.GetComponent<AABB>();
-                            CollisionManager.thowmps.Add(wallAABB);
+                            CollisionManager.walls.Add(wallAABB);
                         }
                         if (obsSpawn == 7)
                         {
@@ -84,7 +87,7 @@ public class GameController : MonoBehaviour {
                             GameObject objLava = Instantiate(lava, lavaPos, Quaternion.identity);
                             obsticles.Add(objLava);
                             AABB lavaAABB = objLava.GetComponent<AABB>();
-                            CollisionManager.thowmps.Add(lavaAABB);
+                            CollisionManager.lavas.Add(lavaAABB);
                         }
                     }
                     
@@ -99,9 +102,11 @@ public class GameController : MonoBehaviour {
                         powerupPos = chunks[chunks.Count - 1].transform.Find("PowerupSpawn" + j.ToString()).position;
                         GameObject objPowerup = Instantiate(powerup, powerupPos, Quaternion.identity);
                         powerups.Add(objPowerup);
+                        //AABB powerupAABB = objPowerup.GetComponent<AABB>();
+                        //CollisionManager.powerups.Add(powerupAABB);
                     }
                 }
-            }
+            //}
             /*Vector3 wallPos = Vector3.zero;
 
             wallPos = chunks[chunks.Count - 1].transform.Find("ObsSpwanPoint").position;

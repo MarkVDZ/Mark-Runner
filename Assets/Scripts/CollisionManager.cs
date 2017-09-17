@@ -12,9 +12,6 @@ public class CollisionManager : MonoBehaviour
     static public List<AABB> thowmps = new List<AABB>();
     static public List<AABB> lavas = new List<AABB>();
     static public List<AABB> mines = new List<AABB>();
-    public AABB thump;
-    public AABB wall;
-    public AABB powerup;
 
 
     // Use this for initialization
@@ -62,11 +59,12 @@ public class CollisionManager : MonoBehaviour
 
                 if (resultThowmp == true)
                 {
+                    print(thowmp);
                     //print("COLLIDE!!!");
                     Vector3 fix = thowmp.CalculateOverlapFix(ground);
                     //print(fix);
                     //player.GetComponent<PlayerController>().ApplyFix(fix);
-                    thowmp.GetComponent<Osilate>().isMovingDown = false;
+                    thowmp.GetComponent<Osilate>().isMovingDown = false;                    
                 }
             }
             /*bool resultThowmp = thump.checkOverlap(ground);
@@ -108,7 +106,7 @@ public class CollisionManager : MonoBehaviour
     {
         foreach (AABB thowmp in thowmps)
         {
-            bool resultThowmp = player.checkOverlap(thump);
+            bool resultThowmp = player.checkOverlap(thowmp);
             //print(resultWall);
             if (resultThowmp == true)
             {
@@ -129,7 +127,7 @@ public class CollisionManager : MonoBehaviour
     {
         foreach (AABB lava in lavas)
         {
-            bool resultLava = player.checkOverlap(powerup);
+            bool resultLava = player.checkOverlap(lava);
 
             if (resultLava == true)
             {
@@ -151,6 +149,7 @@ public class CollisionManager : MonoBehaviour
 
             if (resultPowerup == true)
             {
+                print("COLLIDE!!!");
                 powerup.GetComponent<Powerup>().obtainPowerup();
             }
         }
