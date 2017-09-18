@@ -26,10 +26,15 @@ public class CollisionManager : MonoBehaviour
     {
         //print(wall);
         DoCollisionDetectionGround();
-        DoCollisionDetectionWall();
-        DoCollisionDetectionThowmp();
-        DoCollisionDetectionLava();
-        DoCollisionDetectionMine();
+
+        if (PlayerController.isGod == false)
+        {
+            DoCollisionDetectionWall();
+            DoCollisionDetectionThowmp();
+            DoCollisionDetectionLava();
+            DoCollisionDetectionMine();
+            //DoCollisionDetectionPowerup();
+        }
         DoCollisionDetectionPowerup();
 
     }
@@ -91,7 +96,11 @@ public class CollisionManager : MonoBehaviour
             bool resultWall = player.checkOverlap(wall);
             if (resultWall == true)
             {
-                player.GetComponent<PlayerController>().velX = 0;
+                //player.GetComponent<PlayerController>().velX = 0;
+                PlayerController controller = player.GetComponent<PlayerController>();
+                controller.life -= 1;
+                PlayerController.isGod = true;
+                controller.godTimer = .5f;
             }
         }
         /*bool resultWall = player.checkOverlap(wall);
@@ -110,7 +119,20 @@ public class CollisionManager : MonoBehaviour
             //print(resultWall);
             if (resultThowmp == true)
             {
-                player.GetComponent<PlayerController>().velX = 0;
+                PlayerController controller = player.GetComponent<PlayerController>();
+                Vector3 fix = player.CalculateOverlapFix(thowmp);
+                if(fix.y != 0)
+                {
+                    controller.life -= 2;
+                    //print("GSDGSDGASGWGASGAS");
+                }
+                else
+                {
+                    controller.life -= 1;
+                    PlayerController.isGod = true;
+                    controller.godTimer = .5f;
+                }
+                //player.GetComponent<PlayerController>().velX = 0;
             }
         }
         /*bool resultThowmp = player.checkOverlap(thump);
@@ -131,7 +153,7 @@ public class CollisionManager : MonoBehaviour
 
             if (resultLava == true)
             {
-                player.GetComponent<PlayerController>().velX = 0;
+                //player.GetComponent<PlayerController>().velX = 0;
             }
         }
     }
@@ -151,6 +173,13 @@ public class CollisionManager : MonoBehaviour
             {
                 print("COLLIDE!!!");
                 powerup.GetComponent<Powerup>().obtainPowerup();
+                if(powerup.GetComponent<Powerup>().canRemove == true)
+                {
+                    Destroy(powerup.gameObject);
+                    powerups.Remove(powerup);
+                    GetComponent<GameController>().powerups.Remove(powerup.gameObject);
+                    return;
+                }
             }
         }
         /*bool resultPowerup = player.checkOverlap(powerup);
@@ -160,4 +189,5 @@ public class CollisionManager : MonoBehaviour
             powerup.GetComponent<Powerup>().obtainPowerup();
         }*/
     }
+
 }

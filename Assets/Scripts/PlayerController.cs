@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
 
@@ -18,9 +19,15 @@ public class PlayerController : MonoBehaviour {
     public float gravity = 60;
     public bool stopGravity = false;
     public float addedMoveDelay = 0;
-    public float life = 1;
+    public float life;
     float GRAVITY = 0;
     Vector3 pos;
+    public static bool isGod = false;
+    public float godTimer;
+    public static float score;
+    public float multiplier;
+    public Text livesText;
+    public Text scoreText;
     //private Vector3
 
 
@@ -29,6 +36,9 @@ public class PlayerController : MonoBehaviour {
         //jumping = Input.GetAxis("Jump");
         //movingHorizontal = Input.GetAxis("Horizontal");
         //timer = Time.deltaTime;
+        life = 1;
+        score = 0;
+        multiplier = 1;
     }
 	
 	// Update is called once per frame
@@ -39,6 +49,17 @@ public class PlayerController : MonoBehaviour {
         float jumping = Input.GetAxis("Jump"); 
         float movingHorizontal = Input.GetAxisRaw("Horizontal");
         float sliding = Input.GetAxis("Vertical");
+
+        //print(life);
+
+        if(isGod == true)
+        {
+            godTimer -= Time.deltaTime;
+            if(godTimer <= 0)
+            {
+                isGod = false;
+            }
+        }
 
         pos = transform.position;
         //pos.x += velX * Time.deltaTime;
@@ -83,6 +104,8 @@ public class PlayerController : MonoBehaviour {
         if (moveRight == true || moveLeft == true)
         {
             SwapLanes();
+            score += multiplier * multiplier;
+            multiplier = addedMoveDelay * 10;
             moveDelay = .5f + addedMoveDelay;
         }
 
@@ -159,9 +182,16 @@ public class PlayerController : MonoBehaviour {
             //transform.position = pos;
         }*/
 
-        
+
 
         //transform.position = pos;
+        livesText.text = "Health: " + life.ToString();
+        scoreText.text = "Score: " + score.ToString();
+
+        if(life < 0)
+        {
+            //game over
+        }
     }
 
     void Jump()

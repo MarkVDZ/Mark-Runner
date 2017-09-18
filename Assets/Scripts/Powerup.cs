@@ -10,12 +10,13 @@ public class Powerup : MonoBehaviour
     public bool isLife = false;
     public bool isGodPowerup = false;
     public bool isResetPowerup = false;
-    public static bool isGod = false;
+    public bool canRemove = false;
 
     // Use this for initialization
     void Start()
     {
-        int powerPick = Random.Range(1, 10);
+        //player = GetComponent<PlayerController>();
+        int powerPick = Random.Range(1, 11);
         //print(powerPick);
         switch (powerPick)
         {
@@ -59,6 +60,8 @@ public class Powerup : MonoBehaviour
                 isGodPowerup = true;
                 GetComponent<MeshRenderer>().material.color = Color.red;
                 break;
+            default:
+                break;
         }
         /*if(powerPick >= 9)
         {
@@ -75,7 +78,9 @@ public class Powerup : MonoBehaviour
 
     public void obtainPowerup()
     {
+        player =  FindObjectOfType<PlayerController>();
         //print("PICK A POWERUP");
+        
         if (isLife == true)
         {
             extraLife();
@@ -98,8 +103,9 @@ public class Powerup : MonoBehaviour
         if (player.addedMoveDelay > 0)
         {
             player.addedMoveDelay = 0;
+            player.multiplier = 1;
         }
-
+        canRemove = true;
     }
 
     void extraLife()
@@ -109,11 +115,14 @@ public class Powerup : MonoBehaviour
         {
             player.life += 1;
         }
+        canRemove = true;
     }
 
     void godMode()
     {
         print("ARE GOD!");
-        isGod = true;
+        PlayerController.isGod = true;
+        player.godTimer = 1;
+        canRemove = true;
     }
 }

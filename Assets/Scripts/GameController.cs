@@ -12,8 +12,12 @@ public class GameController : MonoBehaviour {
     public Transform player;
 
     List<GameObject> chunks = new List<GameObject>();
-    List<GameObject> obsticles = new List<GameObject>();
-    List<GameObject> powerups = new List<GameObject>();
+    //List<GameObject> obsticles = new List<GameObject>();
+    List<GameObject> walls = new List<GameObject>();
+    List<GameObject> thowmps = new List<GameObject>();
+    List<GameObject> lavapits = new List<GameObject>();
+    List<GameObject> mines = new List<GameObject>();
+    public List<GameObject> powerups = new List<GameObject>();
     int allowSpawn;
     int obsSpawn;
     int powerSpawn;
@@ -32,6 +36,30 @@ public class GameController : MonoBehaviour {
                 Destroy(chunks[0]);
                 chunks.RemoveAt(0);
                 CollisionManager.groundTiles.RemoveAt(0);
+            }
+            if (player.position.x - walls[0].transform.position.x > 10 && walls.Count != 0)
+            {
+                Destroy(walls[0]);
+                walls.RemoveAt(0);
+                CollisionManager.walls.RemoveAt(0);
+            }
+            if (player.position.x - thowmps[0].transform.position.x > 10 && thowmps.Count != 0)
+            {
+                Destroy(thowmps[0]);
+                thowmps.RemoveAt(0);
+                CollisionManager.thowmps.RemoveAt(0);
+            }
+            if (player.position.x - lavapits[0].transform.position.x > 10 && lavapits.Count != 0)
+            {
+                Destroy(lavapits[0]);
+                lavapits.RemoveAt(0);
+                CollisionManager.lavas.RemoveAt(0);
+            }
+            if (player.position.x - powerups[0].transform.position.x > 10 && powerups.Count != 0)
+            {
+                Destroy(powerups[0]);
+                powerups.RemoveAt(0);
+                CollisionManager.powerups.RemoveAt(0);
             }
         }
 		while(chunks.Count < 5)
@@ -64,7 +92,7 @@ public class GameController : MonoBehaviour {
                             wallPos = chunks[chunks.Count - 1].transform.Find("ObsSpwanPoint" + i.ToString()).position;
                             //wallPos = chunk.transform.Find("ObsSpwanPoint" + i.ToString()).position;
                             GameObject objWall = Instantiate(wall, wallPos, Quaternion.identity);
-                            obsticles.Add(objWall);
+                            walls.Add(objWall);
                             AABB wallAABB = objWall.GetComponent<AABB>();
                             CollisionManager.walls.Add(wallAABB);
                         }
@@ -75,7 +103,7 @@ public class GameController : MonoBehaviour {
                             thowmpPos = chunks[chunks.Count - 1].transform.Find("ObsSpwanPoint" + i.ToString()).position;
                             GameObject objThowmp = Instantiate(thowmp, thowmpPos, Quaternion.identity);
                             float speed = Random.Range(2, 10);
-                            obsticles.Add(objThowmp);
+                            thowmps.Add(objThowmp);
                             AABB thowmpAABB = objThowmp.GetComponent<AABB>();
                             CollisionManager.thowmps.Add(thowmpAABB);
                         }
@@ -85,7 +113,7 @@ public class GameController : MonoBehaviour {
 
                             lavaPos = chunks[chunks.Count - 1].transform.Find("ObsSpwanPoint" + i.ToString()).position;
                             GameObject objLava = Instantiate(lava, lavaPos, Quaternion.identity);
-                            obsticles.Add(objLava);
+                            lavapits.Add(objLava);
                             AABB lavaAABB = objLava.GetComponent<AABB>();
                             CollisionManager.lavas.Add(lavaAABB);
                         }
@@ -102,8 +130,8 @@ public class GameController : MonoBehaviour {
                         powerupPos = chunks[chunks.Count - 1].transform.Find("PowerupSpawn" + j.ToString()).position;
                         GameObject objPowerup = Instantiate(powerup, powerupPos, Quaternion.identity);
                         powerups.Add(objPowerup);
-                        //AABB powerupAABB = objPowerup.GetComponent<AABB>();
-                        //CollisionManager.powerups.Add(powerupAABB);
+                        AABB powerupAABB = objPowerup.GetComponent<AABB>();
+                        CollisionManager.powerups.Add(powerupAABB);
                     }
                 }
             //}
