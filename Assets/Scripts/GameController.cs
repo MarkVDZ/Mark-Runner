@@ -36,31 +36,47 @@ public class GameController : MonoBehaviour {
                 Destroy(chunks[0]);
                 chunks.RemoveAt(0);
                 CollisionManager.groundTiles.RemoveAt(0);
+
             }
-            if (player.position.x - walls[0].transform.position.x > 10 && walls.Count != 0)
+            if(walls.Count > 0)
             {
-                Destroy(walls[0]);
-                walls.RemoveAt(0);
-                CollisionManager.walls.RemoveAt(0);
+                if (player.position.x - walls[0].transform.position.x > 25)
+                {
+                    Destroy(walls[0]);
+                    walls.RemoveAt(0);
+                    CollisionManager.walls.RemoveAt(0);
+                }
             }
-            if (player.position.x - thowmps[0].transform.position.x > 10 && thowmps.Count != 0)
+            if(thowmps.Count > 0)
             {
-                Destroy(thowmps[0]);
-                thowmps.RemoveAt(0);
-                CollisionManager.thowmps.RemoveAt(0);
+                if (player.position.x - thowmps[0].transform.position.x > 25)
+                {
+                    Destroy(thowmps[0]);
+                    thowmps.RemoveAt(0);
+                    CollisionManager.thowmps.RemoveAt(0);
+                }
             }
-            if (player.position.x - lavapits[0].transform.position.x > 10 && lavapits.Count != 0)
+            
+            if(lavapits.Count > 0)
             {
-                Destroy(lavapits[0]);
-                lavapits.RemoveAt(0);
-                CollisionManager.lavas.RemoveAt(0);
+                if (player.position.x - lavapits[0].transform.position.x > 25)
+                {
+                    Destroy(lavapits[0]);
+                    lavapits.RemoveAt(0);
+                    CollisionManager.lavas.RemoveAt(0);
+                }
             }
-            if (player.position.x - powerups[0].transform.position.x > 10 && powerups.Count != 0)
+            
+            if(powerups.Count > 0)
             {
-                Destroy(powerups[0]);
-                powerups.RemoveAt(0);
-                CollisionManager.powerups.RemoveAt(0);
+                if (player.position.x - powerups[0].transform.position.x > 25)
+                {
+                    Destroy(powerups[0]);
+                    powerups.RemoveAt(0);
+                    CollisionManager.powerups.RemoveAt(0);
+                }
             }
+            
         }
 		while(chunks.Count < 5)
         {
@@ -80,12 +96,12 @@ public class GameController : MonoBehaviour {
                 {
                     allowSpawn = Random.Range(1, 10);
                     //print("i" + i + " " + "Generated " + allowSpawn);
-                    if(allowSpawn >= 3)
+                    if(allowSpawn >= 4)
                     {
-                        obsSpawn = Random.Range(1, 10);
+                        obsSpawn = Random.Range(1, 11);
                         //print("i" + i + " " + "Generated " + obsSpawn);
                         //print(obsSpawn);
-                        if (obsSpawn == 5)
+                        if (obsSpawn <= 3)
                         {
                             Vector3 wallPos = Vector3.zero;
 
@@ -96,7 +112,7 @@ public class GameController : MonoBehaviour {
                             AABB wallAABB = objWall.GetComponent<AABB>();
                             CollisionManager.walls.Add(wallAABB);
                         }
-                        if (obsSpawn == 7)
+                        if (obsSpawn >= 4 && obsSpawn <= 7)
                         {
                             Vector3 thowmpPos = Vector3.zero;
 
@@ -107,7 +123,7 @@ public class GameController : MonoBehaviour {
                             AABB thowmpAABB = objThowmp.GetComponent<AABB>();
                             CollisionManager.thowmps.Add(thowmpAABB);
                         }
-                        if (obsSpawn == 9)
+                        if (obsSpawn >= 8)
                         {
                             Vector3 lavaPos = Vector3.zero;
 
@@ -144,6 +160,7 @@ public class GameController : MonoBehaviour {
 
         }
 
+        
         
 	}
 }

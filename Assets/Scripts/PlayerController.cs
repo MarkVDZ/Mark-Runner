@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
@@ -28,6 +29,8 @@ public class PlayerController : MonoBehaviour {
     public float multiplier;
     public Text livesText;
     public Text scoreText;
+    public Image vision;
+    private float deadDelay;
     //private Vector3
 
 
@@ -39,6 +42,7 @@ public class PlayerController : MonoBehaviour {
         life = 1;
         score = 0;
         multiplier = 1;
+        deadDelay = 3;
     }
 	
 	// Update is called once per frame
@@ -62,18 +66,18 @@ public class PlayerController : MonoBehaviour {
         }
 
         pos = transform.position;
-        //pos.x += velX * Time.deltaTime;
+        pos.x += velX * Time.deltaTime;
         //transform.position = pos;
         if (stopGravity == false)
         {
-            float accY = gravity * Time.deltaTime;
+            //float accY = gravity * Time.deltaTime;
             GRAVITY = (gravity * Time.deltaTime) * 2;
             //print(GRAVITY);
             pos.y += velY - GRAVITY;// gravity * Time.deltaTime;
             transform.position = pos;
         }
 
-        if (jumping > 0 && jumpTimer < .4f)
+        if (jumping > 0 && jumpTimer < .2f)
         {
             //print(jumping);
             jumpTimer += jumping * Time.deltaTime;
@@ -85,13 +89,13 @@ public class PlayerController : MonoBehaviour {
             velY = 0;
         }
 
-        if (movingHorizontal > 0 && moveLeft == false && moveRight == false && moveDelay <= 0) {
+        if (movingHorizontal > 0 && moveLeft == false && moveRight == false && moveDelay <= 0 && pos.y < 1.2) {
             //print(movingHorizontal);
             moveRight = true;
 
             //SwapLanes();
         }
-        else if (movingHorizontal < 0 && moveRight == false && moveLeft == false && moveDelay <= 0)
+        else if (movingHorizontal < 0 && moveRight == false && moveLeft == false && moveDelay <= 0 && pos.y < 1.2)
         {
             moveLeft = true;
             //print(movingHorizontal);
@@ -109,7 +113,7 @@ public class PlayerController : MonoBehaviour {
             moveDelay = .5f + addedMoveDelay;
         }
 
-        if (sliding < 0)
+        if (sliding < 0 && pos.y < 1.2 && moveRight == false && moveLeft == false)
         {
             isSliding = true;
             slideTimer += .2f;
@@ -183,7 +187,13 @@ public class PlayerController : MonoBehaviour {
         }*/
 
 
-
+        if(isGod == true)
+        {
+            vision.gameObject.SetActive(true);
+        } else
+        {
+            vision.gameObject.SetActive(false);
+        }
         //transform.position = pos;
         livesText.text = "Health: " + life.ToString();
         scoreText.text = "Score: " + score.ToString();
@@ -191,6 +201,12 @@ public class PlayerController : MonoBehaviour {
         if(life < 0)
         {
             //game over
+            deadDelay -= Time.deltaTime;
+            if(deadDelay <= 0)
+            {
+                SceneManager.LoadScene("GameOverScene");
+            }
+            
         }
     }
 

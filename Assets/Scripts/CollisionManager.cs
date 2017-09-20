@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CollisionManager : MonoBehaviour
 {
-
+    
     AABB player;
     static public List<AABB> groundTiles = new List<AABB>();
     static public List<AABB> powerups = new List<AABB>();
@@ -12,12 +12,14 @@ public class CollisionManager : MonoBehaviour
     static public List<AABB> thowmps = new List<AABB>();
     static public List<AABB> lavas = new List<AABB>();
     static public List<AABB> mines = new List<AABB>();
+    
 
 
     // Use this for initialization
     void Start()
     {
         player = GameObject.Find("Player").GetComponent<AABB>();
+        
         //wall = GameObject.Find("Wall").GetComponent<AABB>();
     }
 
@@ -64,8 +66,7 @@ public class CollisionManager : MonoBehaviour
 
                 if (resultThowmp == true)
                 {
-                    print(thowmp);
-                    //print("COLLIDE!!!");
+                    
                     Vector3 fix = thowmp.CalculateOverlapFix(ground);
                     //print(fix);
                     //player.GetComponent<PlayerController>().ApplyFix(fix);
@@ -98,9 +99,18 @@ public class CollisionManager : MonoBehaviour
             {
                 //player.GetComponent<PlayerController>().velX = 0;
                 PlayerController controller = player.GetComponent<PlayerController>();
-                controller.life -= 1;
-                PlayerController.isGod = true;
-                controller.godTimer = .5f;
+                Vector3 fix = player.CalculateOverlapFix(wall);
+                if(fix.y != 0)
+                {
+                    player.GetComponent<PlayerController>().ApplyFix(fix);
+                }
+                else
+                {
+                    controller.life -= 1;
+                    PlayerController.isGod = true;
+                    controller.godTimer = .5f;
+                }
+                
             }
         }
         /*bool resultWall = player.checkOverlap(wall);
@@ -153,7 +163,19 @@ public class CollisionManager : MonoBehaviour
 
             if (resultLava == true)
             {
-                //player.GetComponent<PlayerController>().velX = 0;
+                PlayerController controller = player.GetComponent<PlayerController>();
+                Vector3 fix = player.CalculateOverlapFix(lava);
+                if (fix.y != 0)
+                {
+                    controller.life -= 1;
+                    player.GetComponent<Transform>().position = new Vector3(player.GetComponent<Transform>().position.x, player.GetComponent<Transform>().position.y + 2, player.GetComponent<Transform>().position.z);
+                    //print("GSDGSDGASGWGASGAS");
+
+                }
+                else
+                {
+                    player.GetComponent<PlayerController>().ApplyFix(fix);
+                }
             }
         }
     }
@@ -171,8 +193,9 @@ public class CollisionManager : MonoBehaviour
 
             if (resultPowerup == true)
             {
-                print("COLLIDE!!!");
+                //print("COLLIDE!!!");
                 powerup.GetComponent<Powerup>().obtainPowerup();
+                
                 if(powerup.GetComponent<Powerup>().canRemove == true)
                 {
                     Destroy(powerup.gameObject);
