@@ -5,8 +5,10 @@ using UnityEngine.Audio;
 
 public class CollisionManager : MonoBehaviour
 {
-    
+    //A reference to the player's AABB
     AABB player;
+
+    //Lists of all the different types of objects the player can interact with
     static public List<AABB> groundTiles = new List<AABB>();
     static public List<AABB> powerups = new List<AABB>();
     static public List<AABB> walls = new List<AABB>();
@@ -14,28 +16,35 @@ public class CollisionManager : MonoBehaviour
     static public List<AABB> lavas = new List<AABB>();
     static public List<AABB> mines = new List<AABB>();
 
-    //public AudioClip move;
-    //public AudioClip jump;
-    //public AudioClip die;
+    //These are the audio clips used for when the player collides with an object
      public AudioClip hurt;
      public AudioClip pickup;
 
 
     // Use this for initialization
+    /// <summary>
+    /// Sets the players AABB and clears the lists to avoid replay errors
+    /// </summary>
     void Start()
     {
         player = GameObject.Find("Player").GetComponent<AABB>();
-        
-        //wall = GameObject.Find("Wall").GetComponent<AABB>();
+        groundTiles.Clear();
+        powerups.Clear();
+        walls.Clear();
+        thowmps.Clear();
+        lavas.Clear();
     }
 
     // Update is called once per frame
+    /// <summary>
+    /// This calls all the different collision methods
+    /// </summary>
     void LateUpdate()
     {
         //print(wall);
         DoCollisionDetectionGround();
 
-        if (PlayerController.isGod == false)
+        if (PlayerController.isGod == false && PlayerController.isDead == false)
         {
             DoCollisionDetectionWall();
             DoCollisionDetectionThowmp();
@@ -47,6 +56,9 @@ public class CollisionManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Handles collison of objects with the ground
+    /// </summary>
     void DoCollisionDetectionGround()
     {
 
@@ -61,16 +73,12 @@ public class CollisionManager : MonoBehaviour
                 player.GetComponent<PlayerController>().ApplyFix(fix);
 
             }
-            /*else
-            {
-                player.GetComponent<PlayerController>().stopGravity = false;
-                //player.GetComponent<MeshRenderer>().material.color = Color.blue;
-            }*/
+
             foreach (AABB thowmp in thowmps)
             {
                 bool resultThowmp = thowmp.checkOverlap(ground);
 
-                if (resultThowmp == true)
+                if (resultThowmp == true && thowmp != null)
                 {
                     
                     Vector3 fix = thowmp.CalculateOverlapFix(ground);
@@ -79,23 +87,12 @@ public class CollisionManager : MonoBehaviour
                     thowmp.GetComponent<Osilate>().isMovingDown = false;                    
                 }
             }
-            /*bool resultThowmp = thump.checkOverlap(ground);
-
-            if (resultThowmp == true)
-            {
-                print("COLLIDE!!!");
-                Vector3 fix = thump.CalculateOverlapFix(ground);
-                //print(fix);
-                //player.GetComponent<PlayerController>().ApplyFix(fix);
-                thump.GetComponent<Osilate>().isMovingDown = false;
-            }*/
-
         }
-
-
-
-
     }
+
+    /// <summary>
+    /// Handles player collision with the walls
+    /// </summary>
     void DoCollisionDetectionWall()
     {
         foreach (AABB wall in walls)
@@ -103,18 +100,18 @@ public class CollisionManager : MonoBehaviour
             bool resultWall = player.checkOverlap(wall);
             if (resultWall == true)
             {
-                //player.GetComponent<PlayerController>().velX = 0;
                 PlayerController controller = player.GetComponent<PlayerController>();
                 Vector3 fix = player.CalculateOverlapFix(wall);
                 if(fix.y != 0)
                 {
                     player.GetComponent<PlayerController>().ApplyFix(fix);
                     PlayerController.isGod = true;
-                    controller.godTimer = .2f;
+                    controller.godTimer = .3f;
                 }
                 else
                 {
                     AudioSource.PlayClipAtPoint(hurt, transform.position);
+                    controller.blood.Play();
                     controller.life -= 1;
                     PlayerController.isGod = true;
                     controller.godTimer = .5f;
@@ -122,14 +119,11 @@ public class CollisionManager : MonoBehaviour
                 
             }
         }
-        /*bool resultWall = player.checkOverlap(wall);
-        //print(resultWall);
-        if (resultWall == true)
-        {
-            player.GetComponent<PlayerController>().velX = 0;
-        }*/
     }
 
+    /// <summary>
+    /// Handles player collision with the thowmps
+    /// </summary>
     void DoCollisionDetectionThowmp()
     {
         foreach (AABB thowmp in thowmps)
@@ -152,19 +146,14 @@ public class CollisionManager : MonoBehaviour
                     PlayerController.isGod = true;
                     controller.godTimer = .5f;
                 }
-                //player.GetComponent<PlayerController>().velX = 0;
+                controller.blood.Play();
             }
         }
-        /*bool resultThowmp = player.checkOverlap(thump);
-        //print(resultWall);
-        if (resultThowmp == true)
-        {
-            player.GetComponent<PlayerController>().velX = 0;
-        }*/
-
-
     }
 
+    /// <summary>
+    /// Handles player collision with the lava
+    /// </summary>
     void DoCollisionDetectionLava()
     {
         foreach (AABB lava in lavas)
@@ -181,13 +170,12 @@ public class CollisionManager : MonoBehaviour
                     controller.life -= 1;
                     player.GetComponent<Transform>().position = new Vector3(player.GetComponent<Transform>().position.x, player.GetComponent<Transform>().position.y + 2, player.GetComponent<Transform>().position.z);
                     //print("GSDGSDGASGWGASGAS");
-
+                    controller.blood.Play();
                 }
                 else
                 {
                     player.GetComponent<PlayerController>().ApplyFix(fix);
                 }
-                
             }
         }
     }
@@ -197,15 +185,16 @@ public class CollisionManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Handles player collision with the powerups
+    /// </summary>
     void DoCollisionDetectionPowerup()
     {
         foreach (AABB powerup in powerups)
         {
             bool resultPowerup = player.checkOverlap(powerup);
-            //GetComponent<SoundManager>().playSFX(GetComponent<SoundManager>().pickup);
-            if (resultPowerup == true)
+            if (resultPowerup == true && powerup != null)
             {
-                
                 //print("COLLIDE!!!");
                 powerup.GetComponent<Powerup>().obtainPowerup();
                 AudioSource.PlayClipAtPoint(pickup, transform.position);
@@ -218,12 +207,5 @@ public class CollisionManager : MonoBehaviour
                 }
             }
         }
-        /*bool resultPowerup = player.checkOverlap(powerup);
-        //print(resultWall);
-        if (resultPowerup == true)
-        {
-            powerup.GetComponent<Powerup>().obtainPowerup();
-        }*/
     }
-
 }

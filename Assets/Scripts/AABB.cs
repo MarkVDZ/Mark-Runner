@@ -4,26 +4,41 @@ using UnityEngine;
 
 public class AABB : MonoBehaviour {
 
-    List<AABB> currentOverlaps = new List<AABB>();
-
+    /// <summary>
+    /// Stores the half size of an object for calculating edges
+    /// </summary>
     public Vector3 halfSize;
 
+    /// <summary>
+    /// The min and the max of the AABB
+    /// </summary>
     Vector3 min = Vector3.zero;
     Vector3 max = Vector3.zero;
 
+    /// <summary>
+    /// This is the offset used for objects that pivot isn't at their center
+    /// </summary>
     public Vector3 offset;
 	
-	// Update is called once per frame
+    /// <summary>
+    /// Update is called every frame
+    /// </summary>
 	void Update () {
         calcEdges();
 	}
-
+    /// <summary>
+    /// Calculates the edges of objects for AABB using min and max
+    /// </summary>
     public void calcEdges()
     {
         min = transform.position - halfSize;
         max = transform.position + halfSize;
     }
-
+    /// <summary>
+    /// Checks for collison with other AABB objects
+    /// </summary>
+    /// <param name="other">Passes in another AABB object to check against</param>
+    /// <returns>If there isn't a gap, there is collison</returns>
     public bool checkOverlap(AABB other)
     {
         if(other != null)
@@ -43,7 +58,12 @@ public class AABB : MonoBehaviour {
     }
 
     //How far to move this AABB to correct its overlap with other AABB
-
+    /// <summary>
+    /// This method is called when there is an overlap and moves one of the objects which ever way
+    /// is the shortest distance to move
+    /// </summary>
+    /// <param name="other">Passes in another AABB object to check against</param>
+    /// <returns>Returns the vector 3 of the move</returns>
     public Vector3 CalculateOverlapFix(AABB other)
     {
         

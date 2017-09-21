@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class Osilate : MonoBehaviour {
 
+    //Is the object moving down or up?
     public bool isMovingDown = true;
+    //Determines how fast the object is moving
     public float speed;
 
 	// Use this for initialization
+    /// <summary>
+    /// Sets a random speed for the objects to move at
+    /// </summary>
 	void Start () {
         speed = Random.Range(2, 7);
 	}
 	
 	// Update is called once per frame
+    /// <summary>
+    /// Move the object either up or down every frame
+    /// </summary>
 	void Update () {
         Vector3 pos = transform.position;
 

@@ -6,39 +6,80 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
-    private bool moveLeft = false;
-    private bool moveRight = false;
-    private float jumpCap = 3;
-    private int lane = 0;
-    private bool isSliding = false;
-    private bool isJumping = false;
-    private float jumpTimer = 0;
-    private float slideTimer = 0;
-    private float moveDelay = 0;
-    public float velX = 10;
-    public float velY = 0;
-    public float gravity = 60;
-    public bool stopGravity = false;
-    public float addedMoveDelay = 0;
-    public float life;
-    float GRAVITY = 0;
-    Vector3 pos;
-    public static bool isGod = false;
-    public float godTimer;
+    //Static references
+    //Players score
     public static float score;
+    //Does the player have Iframes?
+    public static bool isGod = false;
+    //Is the player dead?
+    public static bool isDead;
+
+    //Vector 3 used for changing the players position, but allowing access to change specific axis
+    private Vector3 pos;
+
+    //Can the player move left?
+    private bool moveLeft = false;
+    //Can the player move right?
+    private bool moveRight = false;
+    //Is the player sliding?
+    private bool isSliding = false;
+    //Is the player jumping?
+    private bool isJumping = false;
+
+    //How high can the player jump
+    private float jumpCap = 3;
+    //Stop the scene change with this
+    private float deadDelay;
+    //How long has the player been jumping?
+    private float jumpTimer = 0;
+    //How long has the player been sliding?
+    private float slideTimer = 0;
+    //How long should we prevent the player from moving
+    private float moveDelay = 0;
+    //Used for gravity calculations
+    private float Gravity = 0;
+
+    //Sets the lane the player is in
+    private int lane = 0;
+    
+    //Speed the player is moving forward
+    public float velX = 10;
+    //Speed gravity is pulling the player
+    public float velY = 0;
+    //Another gravity used for calculations for 1/meter per second
+    public float gravity = 60;
+    //Additional move delay
+    public float addedMoveDelay = 0;
+    //Number of lives the player has
+    public float life;
+    //How long the player is invincible
+    public float godTimer;
+    //Score multiplier
     public float multiplier;
+
+    //Should gravity be used?
+    public bool stopGravity = false;
+
+    //Canvas text to display information to the player
     public Text livesText;
     public Text scoreText;
+    public Text modeText;
+    //Toggles a screen overlay on for certain effects
     public Image vision;
-    private float deadDelay;
-    //private Vector3
+       
+    //Particle system used when the player takes damage
+    public ParticleSystem blood;
 
+    //Audioclips used when the player does a certain action
     public AudioClip move;
     public AudioClip jump;
     public AudioClip die;
 
 
     // Use this for initialization
+    /// <summary>
+    /// Resets certain variables for game reset
+    /// </summary>
     void Start () {
         //jumping = Input.GetAxis("Jump");
         //movingHorizontal = Input.GetAxis("Horizontal");
@@ -47,12 +88,14 @@ public class PlayerController : MonoBehaviour {
         score = 0;
         multiplier = 1;
         deadDelay = 3;
+        isDead = false;
     }
 	
 	// Update is called once per frame
+    /// <summary>
+    /// Updates the player every frame. Handles movement calls
+    /// </summary>
 	void Update () {
-        //timer = 60 * Time.deltaTime;
-        //print(timer);
 
         float jumping = Input.GetAxis("Jump"); 
         float movingHorizontal = Input.GetAxisRaw("Horizontal");
@@ -71,13 +114,11 @@ public class PlayerController : MonoBehaviour {
 
         pos = transform.position;
         pos.x += velX * Time.deltaTime;
-        //transform.position = pos;
         if (stopGravity == false)
         {
-            //float accY = gravity * Time.deltaTime;
-            GRAVITY = (gravity * Time.deltaTime) * 2;
+            Gravity = (gravity * Time.deltaTime) * 2;
             //print(GRAVITY);
-            pos.y += velY - GRAVITY;// gravity * Time.deltaTime;
+            pos.y += velY - Gravity;
             transform.position = pos;
         }
 
@@ -94,21 +135,15 @@ public class PlayerController : MonoBehaviour {
             velY = 0;
         }
 
-        if (movingHorizontal > 0 && moveLeft == false && moveRight == false && moveDelay <= 0 && pos.y < 1.2) {
+        if (movingHorizontal > 0 && moveLeft == false && moveRight == false && moveDelay <= 0 && pos.y < 1.2)
+        {
             //print(movingHorizontal);
             moveRight = true;
-
-            //SwapLanes();
         }
         else if (movingHorizontal < 0 && moveRight == false && moveLeft == false && moveDelay <= 0 && pos.y < 1.2)
         {
             moveLeft = true;
-            //print(movingHorizontal);
-
-           // SwapLanes();
         }
-        //print(moveLeft);
-        //print(moveRight);
 
         if (moveRight == true || moveLeft == true)
         {
@@ -138,32 +173,15 @@ public class PlayerController : MonoBehaviour {
             transform.localPosition = new Vector3(transform.localPosition.x, jumpCap);
         }
 
-        /*if(transform.localPosition.z >= 3.1)
-        {
-            //transform.localPosition = new Vector3(0, 0, rightLane);
-            transform.Translate(0, 0, leftLane);
-            print("LOCKED TO THE RIGHT!!!!!!!!!!!");
-        }
-        if(transform.localPosition.z <= -3.1)
-        {
-            //transform.localPosition = new Vector3(0, 0, leftLane);
-            transform.Translate(0, 0, rightLane);
-            print("LOCKED TO THE LEFT!!!!!!!!!!!!!!");
-        }*/
-
         if(isSliding == false)
         {
             transform.localScale = Vector3.one;
         }
-
-        //print(transform.localPosition);
         
         if(moveDelay > 0)
         {
             moveDelay = moveDelay - Time.deltaTime;
         }
-
-        
 
         if(lane > 1)
         {
@@ -174,23 +192,6 @@ public class PlayerController : MonoBehaviour {
             lane++;
         }
         moveLane();
-        //print(velX);
-        //print(moveDelay);
-        //pos.x += velX * Time.deltaTime;
-        //transform.position = pos;
-        /*if (stopGravity == false)
-        {
-            float accY = gravity * Time.deltaTime;
-            //GRAVITY = (gravity * Time.deltaTime) * 2;
-            //print(GRAVITY);
-            //pos.y += velY - GRAVITY;// gravity * Time.deltaTime;
-            velY = accY;
-            print(velY);
-            pos.y = velY;
-            print(velY);
-            //transform.position = pos;
-        }*/
-
 
         if(isGod == true)
         {
@@ -202,54 +203,58 @@ public class PlayerController : MonoBehaviour {
         //transform.position = pos;
         livesText.text = "Health: " + life.ToString();
         scoreText.text = "Score: " + score.ToString();
+        modeText.text = "God Mode: " + isGod.ToString();
 
-        if(life < 0)
+        if (life < 0)
         {
             //game over
             AudioSource.PlayClipAtPoint(die, transform.position);
             deadDelay -= Time.deltaTime;
             velX = 0;
             velY = 0;
-
+            isDead = true;
             if(deadDelay <= 0)
             {
+                //Change the sceen to game over
                 SceneManager.LoadScene("GameOverScene");
             }
-            
         }
     }
-
+    /// <summary>
+    /// This function handles when the player is jumping
+    /// </summary>
     void Jump()
     {
-        print("Jumping");
-        //transform.Translate(new Vector3(0, (jumpTimer * 5), 0));
+        //print("Jumping");
         velY += 10 * Time.deltaTime;
         pos.y = velY; 
-
     }
 
+    /// <summary>
+    /// This function handles when the player is sliding
+    /// initially speeds them up than slows them down
+    /// </summary>
     void Slide()
     {
-        print("Sliding");
-
-        print(slideTimer);
+        //print("Sliding");
         transform.localScale = new Vector3(transform.localScale.x, .5f, transform.localScale.z);
         if(velX > 3)
         {
-            velX = 10;// - slideTimer;
+            velX = 10;
             if(slideTimer >= 5)
             {
                 velX -= (slideTimer * .5f);
             }
-        }
-        
+        }     
         GetComponent<AABB>().halfSize.y = .25f;
-
     }
 
+    /// <summary>
+    /// This function sets the players lane and plays a sound effect for moving
+    /// It also ticks up the delay timer
+    /// </summary>
     void SwapLanes()
     {
-
         if(moveRight == true)
         {
             AudioSource.PlayClipAtPoint(move, transform.position);
@@ -264,10 +269,11 @@ public class PlayerController : MonoBehaviour {
             addedMoveDelay += .1f;
             moveLeft = false;
         }
-
-        //print(moveAmount);
     }
 
+    /// <summary>
+    /// This function moves the player physically based on the lane they are in
+    /// </summary>
     void moveLane()
     {
         if(lane == -1)
@@ -282,9 +288,10 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    //Apply a collision "fix" to prevent collision detection
-    //param fix How far to move the player
-
+    /// <summary>
+    /// Apply a collision "fix" to prevent collision detection
+    /// </summary>
+    /// <param name="fix">How far to move the player</param>
     public void ApplyFix(Vector3 fix)
     {
 
@@ -301,7 +308,7 @@ public class PlayerController : MonoBehaviour {
             //zero y velocity
             if(isJumping != true)
             {
-                GRAVITY = 0;
+                Gravity = 0;
                 //velY = 0;
                 jumpTimer = 0;
             }

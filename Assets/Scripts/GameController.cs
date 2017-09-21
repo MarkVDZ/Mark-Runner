@@ -4,36 +4,47 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour {
 
+    //References to the different GameObjects that can be generated
     public GameObject ground;
     public GameObject wall;
     public GameObject thowmp;
     public GameObject lava;
     public GameObject powerup;
+
+    //Reference to the player's transform
     public Transform player;
 
-    List<GameObject> chunks = new List<GameObject>();
-    //List<GameObject> obsticles = new List<GameObject>();
-    List<GameObject> walls = new List<GameObject>();
-    List<GameObject> thowmps = new List<GameObject>();
-    List<GameObject> lavapits = new List<GameObject>();
-    List<GameObject> mines = new List<GameObject>();
-    public List<GameObject> powerups = new List<GameObject>();
+    //Lists to store all the different GameObjects that can be generated
+    List<GameObject> chunks = new List<GameObject>(); //Ground
+    //List<GameObject> obsticles = new List<GameObject>);
+    List<GameObject> walls = new List<GameObject>(); //Walls 
+    List<GameObject> thowmps = new List<GameObject>(); //Thowmps
+    List<GameObject> lavapits = new List<GameObject>(); //Lava
+    List<GameObject> mines = new List<GameObject>(); 
+    public List<GameObject> powerups = new List<GameObject>(); //Powerups
+
+    //Integers used for random number generation that controls spawning
     int allowSpawn;
     int obsSpawn;
     int powerSpawn;
 
-    //public AudioClip bgMusic;
-
-   // public AudioSource audio;
-
 	// Use this for initialization
+    /// <summary>
+    /// Clears all the lists for game reset
+    /// </summary>
 	void Start () {
-        /*audio = GetComponent<AudioSource>();
-        audio.clip = bgMusic;
-        audio.Play();*/
+        chunks.Clear();
+        walls.Clear();
+        thowmps.Clear();
+        lavapits.Clear();
+        powerups.Clear();
 	}
 	
 	// Update is called once per frame
+    /// <summary>
+    /// Generates new ground chunks for the player to move along and the obsticles/powerups on those chunks
+    /// Also removes objects when they are no longer needed and also from the AABB lists in CollisionManager
+    /// </summary>
 	void Update () {
         
         if(chunks.Count > 0)
@@ -97,9 +108,7 @@ public class GameController : MonoBehaviour {
             AABB groundAABB = obj.GetComponent<AABB>();
             CollisionManager.groundTiles.Add(groundAABB);
 
-            //foreach(GameObject chunk in chunks)
-            //{
-            if(chunks.Count > 3)
+            if(chunks.Count > 2)
             {
                 for (int i = 1; i < 9; i++)
                 {
@@ -126,7 +135,7 @@ public class GameController : MonoBehaviour {
                             Vector3 thowmpPos = Vector3.zero;
 
                             thowmpPos = chunks[chunks.Count - 1].transform.Find("ObsSpwanPoint" + i.ToString()).position;
-                            GameObject objThowmp = Instantiate(thowmp, thowmpPos, Quaternion.identity);
+                            GameObject objThowmp = Instantiate(thowmp, thowmpPos, Quaternion.Euler(0, -90, 0));
                             float speed = Random.Range(2, 10);
                             thowmps.Add(objThowmp);
                             AABB thowmpAABB = objThowmp.GetComponent<AABB>();
@@ -153,25 +162,13 @@ public class GameController : MonoBehaviour {
                         Vector3 powerupPos = Vector3.zero;
 
                         powerupPos = chunks[chunks.Count - 1].transform.Find("PowerupSpawn" + j.ToString()).position;
-                        GameObject objPowerup = Instantiate(powerup, powerupPos, Quaternion.identity);
+                        GameObject objPowerup = Instantiate(powerup, powerupPos, Quaternion.Euler(0, 180, 0));
                         powerups.Add(objPowerup);
                         AABB powerupAABB = objPowerup.GetComponent<AABB>();
                         CollisionManager.powerups.Add(powerupAABB);
                     }
                 }
             }
-                
-            //}
-            /*Vector3 wallPos = Vector3.zero;
-
-            wallPos = chunks[chunks.Count - 1].transform.Find("ObsSpwanPoint").position;
-            GameObject objWall = Instantiate(wall, wallPos, Quaternion.identity);
-            walls.Add(objWall);*/
-
-
-        }
-
-        
-        
+        }   
 	}
 }
