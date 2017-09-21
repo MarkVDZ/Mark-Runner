@@ -33,6 +33,10 @@ public class PlayerController : MonoBehaviour {
     private float deadDelay;
     //private Vector3
 
+    public AudioClip move;
+    public AudioClip jump;
+    public AudioClip die;
+
 
     // Use this for initialization
     void Start () {
@@ -79,6 +83,7 @@ public class PlayerController : MonoBehaviour {
 
         if (jumping > 0 && jumpTimer < .2f)
         {
+            AudioSource.PlayClipAtPoint(jump, transform.position);
             //print(jumping);
             jumpTimer += jumping * Time.deltaTime;
             //print(jumpTimer);
@@ -201,7 +206,11 @@ public class PlayerController : MonoBehaviour {
         if(life < 0)
         {
             //game over
+            AudioSource.PlayClipAtPoint(die, transform.position);
             deadDelay -= Time.deltaTime;
+            velX = 0;
+            velY = 0;
+
             if(deadDelay <= 0)
             {
                 SceneManager.LoadScene("GameOverScene");
@@ -243,12 +252,14 @@ public class PlayerController : MonoBehaviour {
 
         if(moveRight == true)
         {
+            AudioSource.PlayClipAtPoint(move, transform.position);
             lane--;
             addedMoveDelay += .1f;
             moveRight = false;
         }
         if(moveLeft == true)
         {
+            AudioSource.PlayClipAtPoint(move, transform.position);
             lane++;
             addedMoveDelay += .1f;
             moveLeft = false;

@@ -13,6 +13,7 @@ public class ObsScale : MonoBehaviour {
         size.y = Random.Range(1, 5);
         //size.z = Random.Range(1, 3);
         print(size);
+        transform.localScale = size;
         transform.GetComponentInParent<AABB>().halfSize.y = size.y / 2;
 	}
 	

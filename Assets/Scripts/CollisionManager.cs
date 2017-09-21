@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class CollisionManager : MonoBehaviour
 {
@@ -12,7 +13,12 @@ public class CollisionManager : MonoBehaviour
     static public List<AABB> thowmps = new List<AABB>();
     static public List<AABB> lavas = new List<AABB>();
     static public List<AABB> mines = new List<AABB>();
-    
+
+    //public AudioClip move;
+    //public AudioClip jump;
+    //public AudioClip die;
+     public AudioClip hurt;
+     public AudioClip pickup;
 
 
     // Use this for initialization
@@ -103,9 +109,12 @@ public class CollisionManager : MonoBehaviour
                 if(fix.y != 0)
                 {
                     player.GetComponent<PlayerController>().ApplyFix(fix);
+                    PlayerController.isGod = true;
+                    controller.godTimer = .2f;
                 }
                 else
                 {
+                    AudioSource.PlayClipAtPoint(hurt, transform.position);
                     controller.life -= 1;
                     PlayerController.isGod = true;
                     controller.godTimer = .5f;
@@ -129,6 +138,7 @@ public class CollisionManager : MonoBehaviour
             //print(resultWall);
             if (resultThowmp == true)
             {
+                AudioSource.PlayClipAtPoint(hurt, transform.position);
                 PlayerController controller = player.GetComponent<PlayerController>();
                 Vector3 fix = player.CalculateOverlapFix(thowmp);
                 if(fix.y != 0)
@@ -163,6 +173,7 @@ public class CollisionManager : MonoBehaviour
 
             if (resultLava == true)
             {
+                AudioSource.PlayClipAtPoint(hurt, transform.position);
                 PlayerController controller = player.GetComponent<PlayerController>();
                 Vector3 fix = player.CalculateOverlapFix(lava);
                 if (fix.y != 0)
@@ -176,6 +187,7 @@ public class CollisionManager : MonoBehaviour
                 {
                     player.GetComponent<PlayerController>().ApplyFix(fix);
                 }
+                
             }
         }
     }
@@ -190,12 +202,13 @@ public class CollisionManager : MonoBehaviour
         foreach (AABB powerup in powerups)
         {
             bool resultPowerup = player.checkOverlap(powerup);
-
+            //GetComponent<SoundManager>().playSFX(GetComponent<SoundManager>().pickup);
             if (resultPowerup == true)
             {
+                
                 //print("COLLIDE!!!");
                 powerup.GetComponent<Powerup>().obtainPowerup();
-                
+                AudioSource.PlayClipAtPoint(pickup, transform.position);
                 if(powerup.GetComponent<Powerup>().canRemove == true)
                 {
                     Destroy(powerup.gameObject);

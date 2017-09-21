@@ -21,9 +21,16 @@ public class GameController : MonoBehaviour {
     int allowSpawn;
     int obsSpawn;
     int powerSpawn;
+
+    //public AudioClip bgMusic;
+
+   // public AudioSource audio;
+
 	// Use this for initialization
 	void Start () {
-        
+        /*audio = GetComponent<AudioSource>();
+        audio.clip = bgMusic;
+        audio.Play();*/
 	}
 	
 	// Update is called once per frame
@@ -92,11 +99,13 @@ public class GameController : MonoBehaviour {
 
             //foreach(GameObject chunk in chunks)
             //{
-                for(int i = 1; i < 9; i++)
+            if(chunks.Count > 3)
+            {
+                for (int i = 1; i < 9; i++)
                 {
                     allowSpawn = Random.Range(1, 10);
                     //print("i" + i + " " + "Generated " + allowSpawn);
-                    if(allowSpawn >= 4)
+                    if (allowSpawn >= 4)
                     {
                         obsSpawn = Random.Range(1, 11);
                         //print("i" + i + " " + "Generated " + obsSpawn);
@@ -134,12 +143,12 @@ public class GameController : MonoBehaviour {
                             CollisionManager.lavas.Add(lavaAABB);
                         }
                     }
-                    
+
                 }
-                for(int j = 1; j <= 6; j++)
+                for (int j = 1; j <= 6; j++)
                 {
                     powerSpawn = Random.Range(1, 10);
-                    if(powerSpawn >= 7)
+                    if (powerSpawn >= 7)
                     {
                         Vector3 powerupPos = Vector3.zero;
 
@@ -150,6 +159,8 @@ public class GameController : MonoBehaviour {
                         CollisionManager.powerups.Add(powerupAABB);
                     }
                 }
+            }
+                
             //}
             /*Vector3 wallPos = Vector3.zero;
 

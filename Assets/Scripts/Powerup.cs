@@ -122,7 +122,7 @@ public class Powerup : MonoBehaviour
     {
         print("ARE GOD!");
         PlayerController.isGod = true;
-        player.godTimer = 1;
+        player.godTimer = 6;
         canRemove = true;
     }
 }
