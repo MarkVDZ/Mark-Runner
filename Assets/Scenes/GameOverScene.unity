@@ -175,7 +175,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Press Enter to die again
+  m_Text: Press Enter or X on controller to die again
 --- !u!222 &154013857
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -578,7 +578,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Press Esc to return to the main menu
+  m_Text: Press Esc or O on controller to return to the main menu
 --- !u!222 &1319161180
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : MonoBehaviour
+{
 
     //Static references
     //Players score
@@ -41,7 +42,9 @@ public class PlayerController : MonoBehaviour {
 
     //Sets the lane the player is in
     private int lane = 0;
-    
+
+    private Color fade = new Color(0, 0, 0, 0);
+
     //Speed the player is moving forward
     public float velX = 10;
     //Speed gravity is pulling the player
@@ -64,9 +67,11 @@ public class PlayerController : MonoBehaviour {
     public Text livesText;
     public Text scoreText;
     public Text modeText;
+
     //Toggles a screen overlay on for certain effects
     public Image vision;
-       
+    public Image deathScreen;
+
     //Particle system used when the player takes damage
     public ParticleSystem blood;
 
@@ -80,7 +85,8 @@ public class PlayerController : MonoBehaviour {
     /// <summary>
     /// Resets certain variables for game reset
     /// </summary>
-    void Start () {
+    void Start()
+    {
         //jumping = Input.GetAxis("Jump");
         //movingHorizontal = Input.GetAxis("Horizontal");
         //timer = Time.deltaTime;
@@ -90,23 +96,24 @@ public class PlayerController : MonoBehaviour {
         deadDelay = 3;
         isDead = false;
     }
-	
-	// Update is called once per frame
+
+    // Update is called once per frame
     /// <summary>
     /// Updates the player every frame. Handles movement calls
     /// </summary>
-	void Update () {
+    void Update()
+    {
 
-        float jumping = Input.GetAxis("Jump"); 
+        float jumping = Input.GetAxis("Jump");
         float movingHorizontal = Input.GetAxisRaw("Horizontal");
         float sliding = Input.GetAxis("Vertical");
 
         //print(life);
 
-        if(isGod == true)
+        if (isGod == true)
         {
             godTimer -= Time.deltaTime;
-            if(godTimer <= 0)
+            if (godTimer <= 0)
             {
                 isGod = false;
             }
@@ -165,25 +172,25 @@ public class PlayerController : MonoBehaviour {
             GetComponent<AABB>().halfSize.y = .5f;
             velX = 5;
             slideTimer = 0;
-            
+
         }
 
-        if(transform.position.y >= jumpCap)
+        if (transform.position.y >= jumpCap)
         {
             transform.localPosition = new Vector3(transform.localPosition.x, jumpCap);
         }
 
-        if(isSliding == false)
+        if (isSliding == false)
         {
             transform.localScale = Vector3.one;
         }
-        
-        if(moveDelay > 0)
+
+        if (moveDelay > 0)
         {
             moveDelay = moveDelay - Time.deltaTime;
         }
 
-        if(lane > 1)
+        if (lane > 1)
         {
             lane--;
         }
@@ -193,10 +200,11 @@ public class PlayerController : MonoBehaviour {
         }
         moveLane();
 
-        if(isGod == true)
+        if (isGod == true)
         {
             vision.gameObject.SetActive(true);
-        } else
+        }
+        else
         {
             vision.gameObject.SetActive(false);
         }
@@ -213,7 +221,11 @@ public class PlayerController : MonoBehaviour {
             velX = 0;
             velY = 0;
             isDead = true;
-            if(deadDelay <= 0)
+            deathScreen.gameObject.SetActive(true);
+            deathScreen.GetComponent<Image>().color = fade;
+            //deathScreen.GetComponent<MeshRenderer>().material.color = fade;
+            fade.a += Time.deltaTime / 2;
+            if (deadDelay <= 0)
             {
                 //Change the sceen to game over
                 SceneManager.LoadScene("GameOverScene");
@@ -227,7 +239,7 @@ public class PlayerController : MonoBehaviour {
     {
         //print("Jumping");
         velY += 10 * Time.deltaTime;
-        pos.y = velY; 
+        pos.y = velY;
     }
 
     /// <summary>
@@ -238,14 +250,14 @@ public class PlayerController : MonoBehaviour {
     {
         //print("Sliding");
         transform.localScale = new Vector3(transform.localScale.x, .5f, transform.localScale.z);
-        if(velX > 3)
+        if (velX > 3)
         {
             velX = 10;
-            if(slideTimer >= 5)
+            if (slideTimer >= 5)
             {
                 velX -= (slideTimer * .5f);
             }
-        }     
+        }
         GetComponent<AABB>().halfSize.y = .25f;
     }
 
@@ -255,14 +267,14 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
     void SwapLanes()
     {
-        if(moveRight == true)
+        if (moveRight == true)
         {
             AudioSource.PlayClipAtPoint(move, transform.position);
             lane--;
             addedMoveDelay += .1f;
             moveRight = false;
         }
-        if(moveLeft == true)
+        if (moveLeft == true)
         {
             AudioSource.PlayClipAtPoint(move, transform.position);
             lane++;
@@ -276,13 +288,15 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
     void moveLane()
     {
-        if(lane == -1)
+        if (lane == -1)
         {
             transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -3);
-        } else if(lane == 0)
+        }
+        else if (lane == 0)
         {
             transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, 0);
-        } else
+        }
+        else
         {
             transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, 3);
         }
@@ -298,7 +312,7 @@ public class PlayerController : MonoBehaviour {
         transform.position += fix;
         GetComponent<AABB>().calcEdges();
 
-        if(fix.x != 0)
+        if (fix.x != 0)
         {
             //zero x velocity
             //pos.x = 0;
@@ -306,13 +320,13 @@ public class PlayerController : MonoBehaviour {
         if (fix.y != 0)
         {
             //zero y velocity
-            if(isJumping != true)
+            if (isJumping != true)
             {
                 Gravity = 0;
                 //velY = 0;
                 jumpTimer = 0;
             }
-            
+
             //pos.y = 0;
         }
         if (fix.z != 0)

@@ -108,7 +108,7 @@ public class GameController : MonoBehaviour {
             AABB groundAABB = obj.GetComponent<AABB>();
             CollisionManager.groundTiles.Add(groundAABB);
 
-            if(chunks.Count > 2)
+            if(chunks.Count > 1)
             {
                 for (int i = 1; i < 9; i++)
                 {
