@@ -12,6 +12,12 @@ public class PlayerController : MonoBehaviour
     public static float score;
     //Does the player have Iframes?
     public static bool isGod = false;
+    //Does the player have Iframes?
+    public static bool hasIframes = false;
+    //Is the game stopped?
+    public static bool isTimeStopped = false;
+    public static bool canPowerJump = false;
+    public static bool canBreakWalls = true;
     //Is the player dead?
     public static bool isDead;
 
@@ -28,7 +34,7 @@ public class PlayerController : MonoBehaviour
     private bool isJumping = false;
 
     //How high can the player jump
-    private float jumpCap = 3;
+    private float jumpCap = 1.5f;
     //Stop the scene change with this
     private float deadDelay;
     //How long has the player been jumping?
@@ -37,8 +43,6 @@ public class PlayerController : MonoBehaviour
     private float slideTimer = 0;
     //How long should we prevent the player from moving
     private float moveDelay = 0;
-    //Used for gravity calculations
-    private float Gravity = 0;
 
     //Sets the lane the player is in
     private int lane = 0;
@@ -46,17 +50,19 @@ public class PlayerController : MonoBehaviour
     private Color fade = new Color(0, 0, 0, 0);
 
     //Speed the player is moving forward
-    public float velX = 10;
+    public float velX = 7;
     //Speed gravity is pulling the player
     public float velY = 0;
     //Another gravity used for calculations for 1/meter per second
-    public float gravity = 60;
+    public float gravity;
     //Additional move delay
     public float addedMoveDelay = 0;
     //Number of lives the player has
     public float life;
     //How long the player is invincible
     public float godTimer;
+    //How long the player is invincible
+    public float iframeTimer;
     //Score multiplier
     public float multiplier;
 
@@ -70,16 +76,28 @@ public class PlayerController : MonoBehaviour
 
     //Toggles a screen overlay on for certain effects
     public Image vision;
+    public Image visionTime;
     public Image deathScreen;
 
     //Particle system used when the player takes damage
     public ParticleSystem blood;
+    public ParticleSystem power;
 
     //Audioclips used when the player does a certain action
     public AudioClip move;
     public AudioClip jump;
     public AudioClip die;
 
+    Vector3 velocity = new Vector3();
+    public bool isGrounded = false;
+    public float jumpTime = .75f;
+    float jumpImpulse;
+    float baseGravityScale = .8f;
+    float jumpGravityScale = .35f;
+    private float jumpDivider = 4;
+    public Light torch;
+    public float timeFreezeTimer;
+    
 
     // Use this for initialization
     /// <summary>
@@ -95,6 +113,9 @@ public class PlayerController : MonoBehaviour
         multiplier = 1;
         deadDelay = 3;
         isDead = false;
+        //gravity = ((jumpCap) / (jumpTime * jumpTime)) / 2;
+
+        //jumpImpulse = gravity * jumpTime;
     }
 
     // Update is called once per frame
@@ -103,13 +124,51 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void Update()
     {
-
+        if (isTimeStopped)
+        {
+            timeFreezeTimer -= Time.deltaTime;
+            if (timeFreezeTimer <= 0)
+            {
+                isTimeStopped = false;
+            }
+            return;
+        }
         float jumping = Input.GetAxis("Jump");
         float movingHorizontal = Input.GetAxisRaw("Horizontal");
         float sliding = Input.GetAxis("Vertical");
+        pos = transform.position;
+        float gravityScale;
+        gravityScale = baseGravityScale;
 
+        gravity = ((jumpCap));
+        jumpImpulse = gravity * jumpTime;
+
+        // Move forward
+        velocity.x = velX * Time.deltaTime;
+        //print(velocity.x);
+
+        if (isGrounded == true)
+        {
+            velocity.y = 0;
+            if (Input.GetButtonDown("Jump"))
+            {
+                Jump();
+            }
+        }
+        else
+        {
+            if (Input.GetButton("Jump"))
+            {
+                if (isJumping == true && velocity.y > 0) gravityScale = jumpGravityScale;
+            }
+
+            //velocity.y -= gravity * Time.deltaTime * gravityScale;
+        }
+        if(pos.y > 1 || !isGrounded || isSliding) velocity.y -= gravity * Time.deltaTime * gravityScale;
+        print(gravityScale);
+        //velocity.y -= gravity * Time.deltaTime * gravityScale;
         //print(life);
-
+        //God Mode Timer
         if (isGod == true)
         {
             godTimer -= Time.deltaTime;
@@ -118,102 +177,45 @@ public class PlayerController : MonoBehaviour
                 isGod = false;
             }
         }
-
-        pos = transform.position;
-        pos.x += velX * Time.deltaTime;
-        if (stopGravity == false)
+        if (hasIframes == true)
         {
-            Gravity = (gravity * Time.deltaTime) * 2;
-            //print(GRAVITY);
-            pos.y += velY - Gravity;
-            transform.position = pos;
+            iframeTimer -= Time.deltaTime;
+            if (iframeTimer <= 0)
+            {
+                hasIframes = false;
+            }
         }
 
-        if (jumping > 0 && jumpTimer < .2f)
-        {
-            AudioSource.PlayClipAtPoint(jump, transform.position);
-            //print(jumping);
-            jumpTimer += jumping * Time.deltaTime;
-            //print(jumpTimer);
-            Jump();
-        }
-        else
-        {
-            velY = 0;
-        }
 
-        if (movingHorizontal > 0 && moveLeft == false && moveRight == false && moveDelay <= 0 && pos.y < 1.2)
-        {
-            //print(movingHorizontal);
-            moveRight = true;
-        }
-        else if (movingHorizontal < 0 && moveRight == false && moveLeft == false && moveDelay <= 0 && pos.y < 1.2)
-        {
-            moveLeft = true;
-        }
+        //Call to switch lanes
+        HandleInput(movingHorizontal, sliding);
 
-        if (moveRight == true || moveLeft == true)
+        /*if (canBreakWalls)
         {
-            SwapLanes();
-            score += multiplier * multiplier;
-            multiplier = addedMoveDelay * 10;
-            moveDelay = .5f + addedMoveDelay;
-        }
-
-        if (sliding < 0 && pos.y < 1.2 && moveRight == false && moveLeft == false)
+            power.Play();
+        }*/
+        /*else
         {
-            isSliding = true;
-            slideTimer += .2f;
-            Slide();
-        }
-        else
-        {
-            isSliding = false;
-            GetComponent<AABB>().halfSize.y = .5f;
-            velX = 5;
-            slideTimer = 0;
-
-        }
-
-        if (transform.position.y >= jumpCap)
-        {
-            transform.localPosition = new Vector3(transform.localPosition.x, jumpCap);
-        }
-
-        if (isSliding == false)
-        {
-            transform.localScale = Vector3.one;
-        }
-
-        if (moveDelay > 0)
-        {
-            moveDelay = moveDelay - Time.deltaTime;
-        }
-
-        if (lane > 1)
-        {
-            lane--;
-        }
-        if (lane < -1)
-        {
-            lane++;
-        }
-        moveLane();
-
+            power.Stop();
+        }*/
+        //Screen effect
         if (isGod == true)
         {
             vision.gameObject.SetActive(true);
+            torch.range = 50;
         }
         else
         {
             vision.gameObject.SetActive(false);
+            torch.range = 30;
         }
+
         //transform.position = pos;
         livesText.text = "Health: " + life.ToString();
         scoreText.text = "Score: " + score.ToString();
         modeText.text = "God Mode: " + isGod.ToString();
 
-        if (life < 0)
+        /*if (life < 0)
         {
             //game over
             AudioSource.PlayClipAtPoint(die, transform.position);
@@ -230,16 +232,86 @@ public class PlayerController : MonoBehaviour
                 //Change the sceen to game over
                 SceneManager.LoadScene("GameOverScene");
             }
+        }*/
+        //if(isGrounded) velocity.y -= .002f;
+        transform.position += velocity;
+        pos = transform.position;
+    }//end update
+
+    /// <summary>
+    /// This method handles when the player is sliding or changing lanes
+    /// </summary>
+    /// <param name="movingHorizontal">How much the left or right button is being pressed</param>
+    /// <param name="sliding"></param>
+    void HandleInput(float movingHorizontal, float sliding)
+    {
+        if (movingHorizontal > 0 && moveLeft == false && moveRight == false && moveDelay <= 0)
+        {
+            //print(movingHorizontal);
+            moveRight = true;
+        }
+        else if (movingHorizontal < 0 && moveRight == false && moveLeft == false && moveDelay <= 0)
+        {
+            moveLeft = true;
+        }
+
+        //Switch lanes
+        if (moveRight == true || moveLeft == true)
+        {
+            SwapLanes();
+            score += multiplier * multiplier;
+            multiplier = addedMoveDelay * 10;
+            moveDelay = .5f + addedMoveDelay;
+        }
+
+        //Move delay logic
+        if (moveDelay > 0)
+        {
+            moveDelay = moveDelay - Time.deltaTime;
+        }
+
+        //Actual lane move
+        if (lane > 1)
+        {
+            lane--;
+        }
+        if (lane < -1)
+        {
+            lane++;
+        }
+        moveLane();
+
+        //Slide Logic
+        if (sliding < 0 && isGrounded && moveRight == false && moveLeft == false)
+        {
+            isSliding = true;
+            slideTimer += .2f;
+            Slide();
+            //isGrounded = false;
+        }
+        else
+        {
+            isSliding = false;
+            transform.localScale = Vector3.one;
+            GetComponent<AABB>().halfSize.y = .5f;
+            velX = 7;
+            slideTimer = 0;
+
         }
     }
+
     /// <summary>
     /// This function handles when the player is jumping
     /// </summary>
     void Jump()
     {
-        //print("Jumping");
+        velocity.y = jumpImpulse / jumpDivider;
+        isJumping = true;
+        isGrounded = false;
+        /*//print("Jumping");
         velY += 10 * Time.deltaTime;
-        pos.y = velY;
+        pos.y = velY;*/
+
     }
 
     /// <summary>
@@ -320,14 +392,19 @@ public class PlayerController : MonoBehaviour
         if (fix.y != 0)
         {
             //zero y velocity
-            if (isJumping != true)
+            if(isJumping == false)
             {
-                Gravity = 0;
-                //velY = 0;
-                jumpTimer = 0;
+                isGrounded = true;
+                velocity.y = 0;
             }
-
-            //pos.y = 0;
+            
+            if(pos.y < 1)
+            {
+                print("NO!!!!!!!!!!!!");
+                isGrounded = true;
+                velocity.y = 0;
+            }
+            //velocity.y = 0;
         }
         if (fix.z != 0)
         {

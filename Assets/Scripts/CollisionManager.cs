@@ -44,7 +44,7 @@ public class CollisionManager : MonoBehaviour
         //print(wall);
         DoCollisionDetectionGround();
 
-        if (PlayerController.isGod == false && PlayerController.isDead == false)
+        if (PlayerController.isGod == false && PlayerController.isDead == false && PlayerController.hasIframes == false)
         {
             DoCollisionDetectionWall();
             DoCollisionDetectionThowmp();
@@ -100,13 +100,21 @@ public class CollisionManager : MonoBehaviour
             bool resultWall = player.checkOverlap(wall);
             if (resultWall == true)
             {
+                if (PlayerController.canBreakWalls)
+                {
+                    Destroy(wall.gameObject);
+                    powerups.Remove(wall);
+                    GetComponent<GameController>().powerups.Remove(wall.gameObject);
+                    PlayerController.canBreakWalls = false;
+                    return;
+                }
                 PlayerController controller = player.GetComponent<PlayerController>();
                 Vector3 fix = player.CalculateOverlapFix(wall);
-                if(fix.y != 0)
+                if (fix.y != 0)
                 {
                     player.GetComponent<PlayerController>().ApplyFix(fix);
-                    PlayerController.isGod = true;
-                    controller.godTimer = .3f;
+                    PlayerController.hasIframes = true;
+                    controller.iframeTimer = .3f;
                 }
                 else
                 {
@@ -114,9 +122,10 @@ public class CollisionManager : MonoBehaviour
                     controller.blood.Play();
                     controller.life -= 1;
                     PlayerController.isGod = true;
-                    controller.godTimer = .5f;
+                    controller.iframeTimer = .5f;
+
                 }
-                
+
             }
         }
     }
@@ -138,13 +147,13 @@ public class CollisionManager : MonoBehaviour
                 if(fix.y != 0)
                 {
                     controller.life -= 2;
-                    //print("GSDGSDGASGWGASGAS");
+                    
                 }
                 else
                 {
                     controller.life -= 1;
-                    PlayerController.isGod = true;
-                    controller.godTimer = .5f;
+                    PlayerController.hasIframes = true;
+                    controller.iframeTimer = .5f;
                 }
                 controller.blood.Play();
             }
@@ -168,8 +177,11 @@ public class CollisionManager : MonoBehaviour
                 if (fix.y != 0)
                 {
                     controller.life -= 1;
-                    player.GetComponent<Transform>().position = new Vector3(player.GetComponent<Transform>().position.x, player.GetComponent<Transform>().position.y + 2, player.GetComponent<Transform>().position.z);
+                    player.GetComponent<Transform>().position = new Vector3(player.GetComponent<Transform>().position.x, player.GetComponent<Transform>().position.y + 3, player.GetComponent<Transform>().position.z);
                     //print("GSDGSDGASGWGASGAS");
+                    PlayerController.hasIframes = true;
+                    controller.iframeTimer = .8f;
+                    player.GetComponent<PlayerController>().isGrounded = false;
                     controller.blood.Play();
                 }
                 else

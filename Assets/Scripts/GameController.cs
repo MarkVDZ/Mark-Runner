@@ -20,7 +20,7 @@ public class GameController : MonoBehaviour {
     List<GameObject> walls = new List<GameObject>(); //Walls 
     List<GameObject> thowmps = new List<GameObject>(); //Thowmps
     List<GameObject> lavapits = new List<GameObject>(); //Lava
-    List<GameObject> mines = new List<GameObject>(); 
+    List<GameObject> mines = new List<GameObject>(); //Mines
     public List<GameObject> powerups = new List<GameObject>(); //Powerups
 
     //Integers used for random number generation that controls spawning
@@ -28,11 +28,14 @@ public class GameController : MonoBehaviour {
     int obsSpawn;
     int powerSpawn;
 
-	// Use this for initialization
+    public float runTime = 0;
+    int step = 0;
+
+    // Use this for initialization
     /// <summary>
     /// Clears all the lists for game reset
     /// </summary>
-	void Start () {
+    void Start () {
         chunks.Clear();
         walls.Clear();
         thowmps.Clear();
@@ -46,6 +49,10 @@ public class GameController : MonoBehaviour {
     /// Also removes objects when they are no longer needed and also from the AABB lists in CollisionManager
     /// </summary>
 	void Update () {
+
+        if (PlayerController.isTimeStopped) return;
+        runTime += Time.deltaTime;
+        StepDifficulty();
         
         if(chunks.Count > 0)
         {
@@ -58,7 +65,13 @@ public class GameController : MonoBehaviour {
             }
             if(walls.Count > 0)
             {
-                if (player.position.x - walls[0].transform.position.x > 25)
+                if(walls[0] == null)
+                {
+                    Destroy(walls[0]);
+                    walls.RemoveAt(0);
+                    CollisionManager.walls.RemoveAt(0);
+                }
+                if (player.position.x - walls[0].transform.position.x > 25 && walls[0] != null)
                 {
                     Destroy(walls[0]);
                     walls.RemoveAt(0);
@@ -171,4 +184,39 @@ public class GameController : MonoBehaviour {
             }
         }   
 	}
+
+    void StepDifficulty()
+    {
+        if(runTime >= 30)
+        {
+            
+            step++;
+            switch (step)
+            {
+                case 1:
+                    print("Case 1");
+
+                    break;
+                case 2:
+                    print("Case 2");
+
+                    break;
+                case 3:
+                    print("Case 3");
+
+                    break;
+                case 4:
+                    print("Case 4");
+
+                    break;
+                case 5:
+
+                    break;
+                case 6:
+
+                    break;
+            }
+            runTime = 0;
+        }
+    }
 }

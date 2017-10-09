@@ -11,6 +11,9 @@ public class Powerup : MonoBehaviour
     public bool isLife = false;
     public bool isGodPowerup = false;
     public bool isResetPowerup = false;
+    public bool isPowerJump = false;
+    public bool isWallBreaker = false;
+    public bool isFreezeTime = false;
     public bool canRemove = false;
 
     //Materials for the different types of powerups
@@ -79,7 +82,7 @@ public class Powerup : MonoBehaviour
     {
         player =  FindObjectOfType<PlayerController>();
         //print("PICK A POWERUP");
-        
+
         if (isLife == true)
         {
             extraLife();
@@ -91,6 +94,18 @@ public class Powerup : MonoBehaviour
         else if (isResetPowerup == true)
         {
             resetPlayerMovement();
+        }
+        else if (isPowerJump)
+        {
+            PowerJump();
+        }
+        else if (isWallBreaker)
+        {
+            WallBreaker();
+        }
+        else if (isFreezeTime)
+        {
+            FreezeTime();
         }
 
 
@@ -128,6 +143,26 @@ public class Powerup : MonoBehaviour
         print("ARE GOD!");
         PlayerController.isGod = true;
         player.godTimer = 6;
+        canRemove = true;
+    }
+    void PowerJump()
+    {
+        print("Power Jump!");
+        PlayerController.canPowerJump = true;
+        //player.godTimer = 6;
+        canRemove = true;
+    }
+    void WallBreaker()
+    {
+        print("Wall Break active!");
+        PlayerController.canBreakWalls = true;
+        canRemove = true;
+    }
+    void FreezeTime()
+    {
+        print("STOP TIME!");
+        PlayerController.isTimeStopped = true;
+        player.godTimer = 2;
         canRemove = true;
     }
 }
