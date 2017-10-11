@@ -149,7 +149,7 @@ public class Powerup : MonoBehaviour
     {
         print("Power Jump!");
         PlayerController.canPowerJump = true;
-        //player.godTimer = 6;
+        player.powerJumpTimer = 6;
         canRemove = true;
     }
     void WallBreaker()
@@ -162,7 +162,7 @@ public class Powerup : MonoBehaviour
     {
         print("STOP TIME!");
         PlayerController.isTimeStopped = true;
-        player.godTimer = 2;
+        player.timeFreezeTimer = 2;
         canRemove = true;
     }
 }

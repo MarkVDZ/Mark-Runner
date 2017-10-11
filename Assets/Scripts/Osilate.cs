@@ -8,13 +8,14 @@ public class Osilate : MonoBehaviour {
     public bool isMovingDown = true;
     //Determines how fast the object is moving
     public float speed;
+    static public float maxRange = 7;
 
 	// Use this for initialization
     /// <summary>
     /// Sets a random speed for the objects to move at
     /// </summary>
 	void Start () {
-        speed = Random.Range(2, 7);
+        speed = Random.Range(2, maxRange);
 	}
 	
 	// Update is called once per frame

@@ -112,9 +112,14 @@ public class CollisionManager : MonoBehaviour
                 Vector3 fix = player.CalculateOverlapFix(wall);
                 if (fix.y != 0)
                 {
-                    player.GetComponent<PlayerController>().ApplyFix(fix);
+                    /*player.GetComponent<PlayerController>().ApplyFix(fix);
                     PlayerController.hasIframes = true;
-                    controller.iframeTimer = .3f;
+                    controller.iframeTimer = .3f;*/
+                    AudioSource.PlayClipAtPoint(hurt, transform.position);
+                    controller.blood.Play();
+                    controller.life -= 1;
+                    PlayerController.isGod = true;
+                    controller.iframeTimer = .5f;
                 }
                 else
                 {

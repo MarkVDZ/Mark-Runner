@@ -187,33 +187,54 @@ public class GameController : MonoBehaviour {
 
     void StepDifficulty()
     {
-        if(runTime >= 30)
+        if(runTime >= 30 && step < 6)
         {
-            
+            PlayerController pc = player.GetComponent<PlayerController>();
             step++;
             switch (step)
             {
                 case 1:
                     print("Case 1");
-
+                    pc.difficulty++;
+                    pc.moveSpeed = 9;
                     break;
                 case 2:
                     print("Case 2");
-
+                    pc.difficulty++;
+                    pc.moveSpeed = 11;
+                    pc.torch.range = 25;
+                    Osilate.maxRange = 9;
+                    ObsScale.maxRange = 6;
+                    pc.baseGravityScale = 1;
                     break;
                 case 3:
                     print("Case 3");
-
+                    pc.difficulty++;
+                    pc.moveSpeed = 13;
+                    pc.torch.range = 20;
+                    Osilate.maxRange = 10;
+                    ObsScale.maxRange = 7;
                     break;
                 case 4:
                     print("Case 4");
-
+                    pc.difficulty++;
+                    pc.moveSpeed = 15;
+                    pc.baseGravityScale = 1.3f;
                     break;
                 case 5:
-
+                    pc.difficulty++;
+                    pc.moveSpeed = 18;
+                    pc.torch.range = 15;
+                    Osilate.maxRange = 12;
+                    ObsScale.maxRange = 9;
                     break;
                 case 6:
-
+                    pc.difficulty++;
+                    pc.moveSpeed = 20;
+                    pc.torch.range = 10;
+                    pc.baseGravityScale = 1.8f;
+                    break;
+                default:
                     break;
             }
             runTime = 0;

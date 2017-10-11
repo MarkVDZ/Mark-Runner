@@ -92,12 +92,15 @@ public class PlayerController : MonoBehaviour
     public bool isGrounded = false;
     public float jumpTime = .75f;
     float jumpImpulse;
-    float baseGravityScale = .8f;
+    public float baseGravityScale = .8f;
     float jumpGravityScale = .35f;
     private float jumpDivider = 4;
     public Light torch;
     public float timeFreezeTimer;
-    
+    public float powerJumpTimer;
+    public float difficulty;
+    public float slideSpeed = 0;
+    public float moveSpeed = 7;
 
     // Use this for initialization
     /// <summary>
@@ -113,6 +116,9 @@ public class PlayerController : MonoBehaviour
         multiplier = 1;
         deadDelay = 3;
         isDead = false;
+        difficulty = 1;
+        baseGravityScale = .8f;
+        moveSpeed = 7;
         //gravity = ((jumpCap) / (jumpTime * jumpTime)) / 2;
 
         //jumpImpulse = gravity * jumpTime;
@@ -139,12 +145,14 @@ public class PlayerController : MonoBehaviour
         pos = transform.position;
         float gravityScale;
         gravityScale = baseGravityScale;
+        print("Grav: "+baseGravityScale);
+        print("SSSpeed: "+velX);
 
         gravity = ((jumpCap));
         jumpImpulse = gravity * jumpTime;
 
         // Move forward
-        velocity.x = velX * Time.deltaTime;
+        velocity.x = (velX + slideSpeed) * Time.deltaTime;
         //print(velocity.x);
 
         if (isGrounded == true)
@@ -185,7 +193,14 @@ public class PlayerController : MonoBehaviour
                 hasIframes = false;
             }
         }
-
+        if (canPowerJump)
+        {
+            powerJumpTimer -= Time.deltaTime;
+            if(powerJumpTimer <= 0)
+            {
+                canPowerJump = false;
+            }
+        }
 
         //Call to switch lanes
         HandleInput(movingHorizontal, sliding);
@@ -259,7 +274,7 @@ public class PlayerController : MonoBehaviour
         if (moveRight == true || moveLeft == true)
         {
             SwapLanes();
-            score += multiplier * multiplier;
+            score += multiplier * multiplier * difficulty;
             multiplier = addedMoveDelay * 10;
             moveDelay = .5f + addedMoveDelay;
         }
@@ -286,6 +301,7 @@ public class PlayerController : MonoBehaviour
         {
             isSliding = true;
             slideTimer += .2f;
+            slideSpeed = 4;
             Slide();
             //isGrounded = false;
         }
@@ -294,7 +310,8 @@ public class PlayerController : MonoBehaviour
             isSliding = false;
             transform.localScale = Vector3.one;
             GetComponent<AABB>().halfSize.y = .5f;
-            velX = 7;
+            velX = moveSpeed;
+            slideSpeed = 0;
             slideTimer = 0;
 
         }
@@ -305,6 +322,14 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void Jump()
     {
+        if (canPowerJump)
+        {
+            jumpDivider = 3;
+        }
+        else
+        {
+            jumpDivider = 4;
+        }
         velocity.y = jumpImpulse / jumpDivider;
         isJumping = true;
         isGrounded = false;
@@ -324,12 +349,25 @@ public class PlayerController : MonoBehaviour
         transform.localScale = new Vector3(transform.localScale.x, .5f, transform.localScale.z);
         if (velX > 3)
         {
-            velX = 10;
-            if (slideTimer >= 5)
+            //velX = 10;
+            velX = moveSpeed + 4;
+            if (slideTimer >= 0)
             {
-                velX -= (slideTimer * .5f);
+                velX -= (slideTimer * 1.2f);
             }
         }
+        /*if (slideSpeed >= 0)
+        {
+            
+            if (slideTimer >= 3 && slideSpeed > -2)
+            {
+                if (slideSpeed < -2) return;
+                print("Lower");
+                slideSpeed -= (slideTimer * .5f);
+            }
+        }*/
+        print(slideSpeed);
+        
         GetComponent<AABB>().halfSize.y = .25f;
     }
 
