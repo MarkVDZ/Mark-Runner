@@ -103,8 +103,8 @@ public class CollisionManager : MonoBehaviour
                 if (PlayerController.canBreakWalls)
                 {
                     Destroy(wall.gameObject);
-                    powerups.Remove(wall);
-                    GetComponent<GameController>().powerups.Remove(wall.gameObject);
+                    walls.Remove(wall);
+                    GetComponent<GameController>().walls.Remove(wall.gameObject);
                     PlayerController.canBreakWalls = false;
                     return;
                 }
@@ -115,10 +115,11 @@ public class CollisionManager : MonoBehaviour
                     /*player.GetComponent<PlayerController>().ApplyFix(fix);
                     PlayerController.hasIframes = true;
                     controller.iframeTimer = .3f;*/
-                    AudioSource.PlayClipAtPoint(hurt, transform.position);
-                    controller.blood.Play();
-                    controller.life -= 1;
-                    PlayerController.isGod = true;
+                    //AudioSource.PlayClipAtPoint(hurt, transform.position);
+                   // controller.blood.Play();
+                   // controller.life -= 1;
+                    //PlayerController.isGod = true;
+                    PlayerController.hasIframes = true;
                     controller.iframeTimer = .5f;
                 }
                 else
@@ -126,7 +127,8 @@ public class CollisionManager : MonoBehaviour
                     AudioSource.PlayClipAtPoint(hurt, transform.position);
                     controller.blood.Play();
                     controller.life -= 1;
-                    PlayerController.isGod = true;
+                    //PlayerController.isGod = true;
+                    PlayerController.hasIframes = true;
                     controller.iframeTimer = .5f;
 
                 }

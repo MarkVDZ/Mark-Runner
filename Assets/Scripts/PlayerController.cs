@@ -366,7 +366,7 @@ public class PlayerController : MonoBehaviour
                 slideSpeed -= (slideTimer * .5f);
             }
         }*/
-        print(slideSpeed);
+        //print(slideSpeed);
         
         GetComponent<AABB>().halfSize.y = .25f;
     }

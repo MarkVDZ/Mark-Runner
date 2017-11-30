@@ -17,7 +17,7 @@ public class GameController : MonoBehaviour {
     //Lists to store all the different GameObjects that can be generated
     List<GameObject> chunks = new List<GameObject>(); //Ground
     //List<GameObject> obsticles = new List<GameObject>);
-    List<GameObject> walls = new List<GameObject>(); //Walls 
+    public List<GameObject> walls = new List<GameObject>(); //Walls 
     List<GameObject> thowmps = new List<GameObject>(); //Thowmps
     List<GameObject> lavapits = new List<GameObject>(); //Lava
     List<GameObject> mines = new List<GameObject>(); //Mines
