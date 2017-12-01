@@ -2,12 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class controls the Thowmps movement up and down
+/// </summary>
 public class Osilate : MonoBehaviour {
 
-    //Is the object moving down or up?
+    /// <summary>
+    /// Is the object moving down or up?
+    /// </summary>
     public bool isMovingDown = true;
-    //Determines how fast the object is moving
+    /// <summary>
+    /// Determines how fast the object is moving
+    /// </summary>
     public float speed;
+    /// <summary>
+    /// The max speed the object can move
+    /// </summary>
+    [HideInInspector]
     static public float maxRange = 7;
 
 	// Use this for initialization

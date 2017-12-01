@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class manages the AABB setup so objects can collide
+/// </summary>
 public class AABB : MonoBehaviour {
 
     /// <summary>

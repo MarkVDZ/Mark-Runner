@@ -2,11 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class makes the camera follow the player
+/// </summary>
 public class CameraFollow : MonoBehaviour {
 
-    //This is what the target will follow
+    /// <summary>
+    /// This is what the target will follow
+    /// </summary>
     public Transform target;
-    //Determines the offset at which to follow
+    /// <summary>
+    /// Determines the offset at which to follow
+    /// </summary>
     public Vector3 offset;
 	
 	// Update is called once per frame

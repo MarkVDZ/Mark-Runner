@@ -4,102 +4,225 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// This class handles player input and movement
+/// </summary>
 public class PlayerController : MonoBehaviour
 {
 
     //Static references
-    //Players score
+    /// <summary>
+    /// Players score
+    /// </summary>
     public static float score;
-    //Does the player have Iframes?
+    /// <summary>
+    /// Does the player have Iframes?
+    /// </summary>
     public static bool isGod = false;
-    //Does the player have Iframes?
+    /// <summary>
+    /// Does the player have Iframes?
+    /// </summary>
     public static bool hasIframes = false;
-    //Is the game stopped?
+    /// <summary>
+    /// Is the game stopped?
+    /// </summary>
     public static bool isTimeStopped = false;
+    /// <summary>
+    /// Can the player power jump?
+    /// </summary>
     public static bool canPowerJump = false;
+    /// <summary>
+    /// Can the player break walls?
+    /// </summary>
     public static bool canBreakWalls = true;
-    //Is the player dead?
+    /// <summary>
+    /// Is the player dead?
+    /// </summary>
     public static bool isDead;
 
-    //Vector 3 used for changing the players position, but allowing access to change specific axis
+    /// <summary>
+    /// Vector 3 used for changing the players position, but allowing access to change specific axis
+    /// </summary>
     private Vector3 pos;
 
-    //Can the player move left?
+    /// <summary>
+    /// Can the player move left?
+    /// </summary>
     private bool moveLeft = false;
-    //Can the player move right?
+    /// <summary>
+    /// Can the player move right?
+    /// </summary>
     private bool moveRight = false;
-    //Is the player sliding?
+    /// <summary>
+    /// Is the player sliding?
+    /// </summary>
     private bool isSliding = false;
-    //Is the player jumping?
+    /// <summary>
+    /// Is the player jumping?
+    /// </summary>
     private bool isJumping = false;
 
-    //How high can the player jump
+    /// <summary>
+    /// How high can the player jump
+    /// </summary>
     private float jumpCap = 1.5f;
-    //Stop the scene change with this
+    /// <summary>
+    /// Stop the scene change with this
+    /// </summary>
     private float deadDelay;
-    //How long has the player been jumping?
+    /// <summary>
+    /// How long has the player been jumping?
+    /// </summary>
     private float jumpTimer = 0;
-    //How long has the player been sliding?
+    /// <summary>
+    /// How long has the player been sliding?
+    /// </summary>
     private float slideTimer = 0;
-    //How long should we prevent the player from moving
+    /// <summary>
+    /// How long should we prevent the player from moving
+    /// </summary>
     private float moveDelay = 0;
 
-    //Sets the lane the player is in
+    /// <summary>
+    /// Sets the lane the player is in
+    /// </summary>
     private int lane = 0;
-
+    /// <summary>
+    /// Controls the screen fade when the player loses
+    /// </summary>
     private Color fade = new Color(0, 0, 0, 0);
 
-    //Speed the player is moving forward
+    /// <summary>
+    /// Speed the player is moving forward
+    /// </summary>
     public float velX = 7;
-    //Speed gravity is pulling the player
+    /// <summary>
+    /// Speed gravity is pulling the player
+    /// </summary>
     public float velY = 0;
-    //Another gravity used for calculations for 1/meter per second
+    /// <summary>
+    /// Gravity used for calculations downwards pull
+    /// </summary>
     public float gravity;
-    //Additional move delay
+    /// <summary>
+    /// Additional move delay
+    /// </summary>
     public float addedMoveDelay = 0;
-    //Number of lives the player has
+    /// <summary>
+    /// Number of lives the player has
+    /// </summary>
     public float life;
-    //How long the player is invincible
+    /// <summary>
+    /// How long the player is invincible
+    /// </summary>
     public float godTimer;
-    //How long the player is invincible
+    /// <summary>
+    /// How long the player is invincible
+    /// </summary>
     public float iframeTimer;
-    //Score multiplier
+    /// <summary>
+    /// Score multiplier
+    /// </summary>
     public float multiplier;
-
-    //Should gravity be used?
-    public bool stopGravity = false;
-
-    //Canvas text to display information to the player
+    /// <summary>
+    /// UI display of the players remaining life
+    /// </summary>
     public Text livesText;
+    /// <summary>
+    /// UI display of the player's score
+    /// </summary>
     public Text scoreText;
+    /// <summary>
+    /// UI display of if the player is in God Mode
+    /// </summary>
     public Text modeText;
 
-    //Toggles a screen overlay on for certain effects
+    /// <summary>
+    /// Screen effect when the player is in God Mode
+    /// </summary>
     public Image vision;
+    /// <summary>
+    /// Screen effect when the player has iFrames
+    /// </summary>
     public Image visionTime;
+    /// <summary>
+    /// Screen displayed when the player dies
+    /// </summary>
     public Image deathScreen;
 
-    //Particle system used when the player takes damage
+    /// <summary>
+    /// Particle system used when the player takes damage
+    /// </summary>
     public ParticleSystem blood;
+    /// <summary>
+    /// Particle system used when the player can break walls
+    /// </summary>
     public ParticleSystem power;
 
-    //Audioclips used when the player does a certain action
+    /// <summary>
+    /// Audio clip for the player moving
+    /// </summary>
     public AudioClip move;
+    /// <summary>
+    /// Audio clip for the player jumping
+    /// </summary>
     public AudioClip jump;
+    /// <summary>
+    /// Audio clip for the player dying
+    /// </summary>
     public AudioClip die;
 
+    /// <summary>
+    /// Velocity of the player
+    /// </summary>
     Vector3 velocity = new Vector3();
+    /// <summary>
+    /// Is the player on the ground?
+    /// </summary>
     public bool isGrounded = false;
+    /// <summary>
+    /// How long the player can hold the jump button
+    /// </summary>
     public float jumpTime = .75f;
+    /// <summary>
+    /// Strength of the jump
+    /// </summary>
     float jumpImpulse;
+    /// <summary>
+    /// Base gravity multiplier
+    /// </summary>
     public float baseGravityScale = .8f;
+    /// <summary>
+    /// Gravity wehn the player jumps
+    /// </summary>
     float jumpGravityScale = .35f;
+    /// <summary>
+    /// Divider used to control more powerful jumps
+    /// </summary>
     private float jumpDivider = 4;
+    /// <summary>
+    /// Light objects attached to the player
+    /// </summary>
     public Light torch;
+    /// <summary>
+    /// How long is time frozen for?
+    /// </summary>
     public float timeFreezeTimer;
+    /// <summary>
+    /// How long can the player power jump
+    /// </summary>
     public float powerJumpTimer;
+    /// <summary>
+    /// Current game difficulty
+    /// </summary>
     public float difficulty;
+    /// <summary>
+    /// Speed the player slides
+    /// </summary>
     public float slideSpeed = 0;
+    /// <summary>
+    /// Players base move speed
+    /// </summary>
     public float moveSpeed = 7;
 
     // Use this for initialization
@@ -108,9 +231,6 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void Start()
     {
-        //jumping = Input.GetAxis("Jump");
-        //movingHorizontal = Input.GetAxis("Horizontal");
-        //timer = Time.deltaTime;
         life = 1;
         score = 0;
         multiplier = 1;
@@ -119,9 +239,6 @@ public class PlayerController : MonoBehaviour
         difficulty = 1;
         baseGravityScale = .8f;
         moveSpeed = 7;
-        //gravity = ((jumpCap) / (jumpTime * jumpTime)) / 2;
-
-        //jumpImpulse = gravity * jumpTime;
     }
 
     // Update is called once per frame
@@ -169,13 +286,8 @@ public class PlayerController : MonoBehaviour
             {
                 if (isJumping == true && velocity.y > 0) gravityScale = jumpGravityScale;
             }
-
-            //velocity.y -= gravity * Time.deltaTime * gravityScale;
         }
         if(pos.y > 1 || !isGrounded || isSliding) velocity.y -= gravity * Time.deltaTime * gravityScale;
-        print(gravityScale);
-        //velocity.y -= gravity * Time.deltaTime * gravityScale;
-        //print(life);
         //God Mode Timer
         if (isGod == true)
         {
@@ -230,7 +342,7 @@ public class PlayerController : MonoBehaviour
         scoreText.text = "Score: " + score.ToString();
         modeText.text = "God Mode: " + isGod.ToString();
 
-        /*if (life < 0)
+        if (life < 0)
         {
             //game over
             AudioSource.PlayClipAtPoint(die, transform.position);
@@ -247,8 +359,7 @@ public class PlayerController : MonoBehaviour
                 //Change the sceen to game over
                 SceneManager.LoadScene("GameOverScene");
             }
-        }*/
-        //if(isGrounded) velocity.y -= .002f;
+        }
         transform.position += velocity;
         pos = transform.position;
     }//end update

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+/// <summary>
+/// This class controls input for the Main Scene
+/// </summary>
 public class StartGame : MonoBehaviour {
 
 	

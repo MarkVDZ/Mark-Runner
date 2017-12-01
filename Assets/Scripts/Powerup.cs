@@ -2,23 +2,57 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class handles powerups for the player and setting them up
+/// </summary>
 public class Powerup : MonoBehaviour
 {
-    //Reference to the player controller to activate powerups
+    
+    /// <summary>
+    /// Reference to the player controller to activate powerups
+    /// </summary>
     PlayerController player;
 
-    //Determines what kind of powerup the powerup is
+    /// <summary>
+    /// Is the powerup a life powerup?
+    /// </summary>
     public bool isLife = false;
+    /// <summary>
+    /// Is the powerup a God Mode powerup?
+    /// </summary>
     public bool isGodPowerup = false;
+    /// <summary>
+    /// Is the powerup a move timer reset powerup?
+    /// </summary>
     public bool isResetPowerup = false;
+    /// <summary>
+    /// Is the powerup a power jump powerup?
+    /// </summary>
     public bool isPowerJump = false;
+    /// <summary>
+    /// Is the powerup a player can break walls powerup?
+    /// </summary>
     public bool isWallBreaker = false;
+    /// <summary>
+    /// Is the powerup a frezee the game powerup?
+    /// </summary>
     public bool isFreezeTime = false;
+    /// <summary>
+    /// Is the powerup ready to be removed from the game?
+    /// </summary>
     public bool canRemove = false;
 
-    //Materials for the different types of powerups
+    /// <summary>
+    /// Life powerup material
+    /// </summary>
     public Material lifeMat;
+    /// <summary>
+    /// Move reset powerup material
+    /// </summary>
     public Material resetMat;
+    /// <summary>
+    /// God Mode powerup material
+    /// </summary>
     public Material godMat;
 
     // Use this for initialization
@@ -145,6 +179,9 @@ public class Powerup : MonoBehaviour
         player.godTimer = 6;
         canRemove = true;
     }
+    /// <summary>
+    /// This powerup gives the player the ability to power jump
+    /// </summary>
     void PowerJump()
     {
         print("Power Jump!");
@@ -152,12 +189,18 @@ public class Powerup : MonoBehaviour
         player.powerJumpTimer = 6;
         canRemove = true;
     }
+    /// <summary>
+    /// This powerup gives the player the ability to break walls
+    /// </summary>
     void WallBreaker()
     {
         print("Wall Break active!");
         PlayerController.canBreakWalls = true;
         canRemove = true;
     }
+    /// <summary>
+    /// This powerup freezes time for a few seconds
+    /// </summary>
     void FreezeTime()
     {
         print("STOP TIME!");

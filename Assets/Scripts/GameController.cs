@@ -2,33 +2,81 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class handles spwaning obsticles and powerups.
+/// It also handles removing them from the game when needed.
+/// </summary>
 public class GameController : MonoBehaviour {
 
-    //References to the different GameObjects that can be generated
+    /// <summary>
+    /// Reference to the ground object that can be generated
+    /// </summary>
     public GameObject ground;
+    /// <summary>
+    /// Reference to the wall object that can be generated
+    /// </summary>
     public GameObject wall;
+    /// <summary>
+    /// Reference to the thowmp object that can be generated
+    /// </summary>
     public GameObject thowmp;
+    /// <summary>
+    /// Reference to the lava object that can be generated
+    /// </summary>
     public GameObject lava;
+    /// <summary>
+    /// Reference to the powerup object that can be generated
+    /// </summary>
     public GameObject powerup;
-
-    //Reference to the player's transform
+    /// <summary>
+    /// Reference to the player's transform
+    /// </summary>
     public Transform player;
 
-    //Lists to store all the different GameObjects that can be generated
+    /// <summary>
+    /// List to store all the ground
+    /// </summary>
     List<GameObject> chunks = new List<GameObject>(); //Ground
-    //List<GameObject> obsticles = new List<GameObject>);
+    /// <summary>
+    /// List to store all the walls
+    /// </summary>
     public List<GameObject> walls = new List<GameObject>(); //Walls 
+    /// <summary>
+    /// List to store all the thowmps
+    /// </summary>
     List<GameObject> thowmps = new List<GameObject>(); //Thowmps
+    /// <summary>
+    /// List to store all the lavapits
+    /// </summary>
     List<GameObject> lavapits = new List<GameObject>(); //Lava
+    /// <summary>
+    /// List to store all the mines
+    /// </summary>
     List<GameObject> mines = new List<GameObject>(); //Mines
+    /// <summary>
+    /// List to store all the powerups
+    /// </summary>
     public List<GameObject> powerups = new List<GameObject>(); //Powerups
 
-    //Integers used for random number generation that controls spawning
+    /// <summary>
+    /// Number used to see if an object can be generated
+    /// </summary>
     int allowSpawn;
+    /// <summary>
+    /// Number used to determine what type of obsticle to spawn
+    /// </summary>
     int obsSpawn;
+    /// <summary>
+    /// Number used to determine what type of powerup to spawn
+    /// </summary>
     int powerSpawn;
-
+    /// <summary>
+    /// How long the game has been running 
+    /// </summary>
     public float runTime = 0;
+    /// <summary>
+    /// This is the current game difficulty
+    /// </summary>
     int step = 0;
 
     // Use this for initialization
@@ -184,7 +232,9 @@ public class GameController : MonoBehaviour {
             }
         }   
 	}
-
+    /// <summary>
+    /// This method increases the game difficulty every 30 seconds till the game is at max difficulty
+    /// </summary>
     void StepDifficulty()
     {
         if(runTime >= 30 && step < 6)

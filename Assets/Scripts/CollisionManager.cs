@@ -3,21 +3,49 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
+/// <summary>
+/// This class handles collision responces between the player and other objects in the scene
+/// </summary>
 public class CollisionManager : MonoBehaviour
 {
-    //A reference to the player's AABB
+    /// <summary>
+    /// A reference to the player's AABB
+    /// </summary>
     AABB player;
 
     //Lists of all the different types of objects the player can interact with
+    /// <summary>
+    /// List of the ground tiles in the scene
+    /// </summary>
     static public List<AABB> groundTiles = new List<AABB>();
+    /// <summary>
+    /// List of the powerups in the scene
+    /// </summary>
     static public List<AABB> powerups = new List<AABB>();
+    /// <summary>
+    /// List of the walls in the scene
+    /// </summary>
     static public List<AABB> walls = new List<AABB>();
+    /// <summary>
+    /// List of the thowmps in the scene
+    /// </summary>
     static public List<AABB> thowmps = new List<AABB>();
+    /// <summary>
+    /// List of the lavapits in the scene
+    /// </summary>
     static public List<AABB> lavas = new List<AABB>();
+    /// <summary>
+    /// List of the mines in the scene
+    /// </summary>
     static public List<AABB> mines = new List<AABB>();
 
-    //These are the audio clips used for when the player collides with an object
+    /// <summary>
+    /// Hurt sounds effect
+    /// </summary>
      public AudioClip hurt;
+    /// <summary>
+    /// Pickup sound effect
+    /// </summary>
      public AudioClip pickup;
 
 
@@ -116,8 +144,8 @@ public class CollisionManager : MonoBehaviour
                     PlayerController.hasIframes = true;
                     controller.iframeTimer = .3f;*/
                     //AudioSource.PlayClipAtPoint(hurt, transform.position);
-                   // controller.blood.Play();
-                   // controller.life -= 1;
+                    //controller.blood.Play();
+                    //controller.life -= 1;
                     //PlayerController.isGod = true;
                     PlayerController.hasIframes = true;
                     controller.iframeTimer = .5f;

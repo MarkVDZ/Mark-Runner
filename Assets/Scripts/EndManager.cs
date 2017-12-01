@@ -4,9 +4,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// This class controls input for the end scene and displays the players score
+/// </summary>
 public class EndManager : MonoBehaviour {
 
-    //Text used to displays the players final score
+    /// <summary>
+    /// Text used to displays the players final score
+    /// </summary>
     public Text scoreText;
 
 	// Use this for initialization

@@ -2,10 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class controls the height of walls
+/// </summary>
 public class ObsScale : MonoBehaviour {
 
-    //Vector 3 used to manipulate certain axis of the object
+    /// <summary>
+    /// Vector 3 used to manipulate certain axis of the object
+    /// </summary>
     public Vector3 size;
+    /// <summary>
+    /// This is the max size the object can be
+    /// </summary>
     [HideInInspector]
     static public float maxRange = 5;
 
