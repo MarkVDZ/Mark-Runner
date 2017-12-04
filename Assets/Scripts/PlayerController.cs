@@ -136,6 +136,14 @@ public class PlayerController : MonoBehaviour
     /// UI display of if the player is in God Mode
     /// </summary>
     public Text modeText;
+    /// <summary>
+    /// UI display of if the player can break walls
+    /// </summary>
+    public Text breakWallText;
+    /// <summary>
+    /// UI display of if the player can power jump
+    /// </summary>
+    public Text powerJumpText;
 
     /// <summary>
     /// Screen effect when the player is in God Mode
@@ -262,8 +270,8 @@ public class PlayerController : MonoBehaviour
         pos = transform.position;
         float gravityScale;
         gravityScale = baseGravityScale;
-        print("Grav: "+baseGravityScale);
-        print("SSSpeed: "+velX);
+        //print("Grav: "+baseGravityScale);
+       // print("SSSpeed: "+velX);
 
         gravity = ((jumpCap));
         jumpImpulse = gravity * jumpTime;
@@ -320,8 +328,8 @@ public class PlayerController : MonoBehaviour
         /*if (canBreakWalls)
         {
             power.Play();
-        }*/
-        /*else
+        }
+        else
         {
             power.Stop();
         }*/
@@ -341,6 +349,8 @@ public class PlayerController : MonoBehaviour
         livesText.text = "Health: " + life.ToString();
         scoreText.text = "Score: " + score.ToString();
         modeText.text = "God Mode: " + isGod.ToString();
+        breakWallText.text = "Break Walls: " + canBreakWalls.ToString();
+        powerJumpText.text = "Power Jump: " + canPowerJump.ToString();
 
         if (life < 0)
         {
@@ -549,7 +559,7 @@ public class PlayerController : MonoBehaviour
             
             if(pos.y < 1)
             {
-                print("NO!!!!!!!!!!!!");
+                //print("NO!!!!!!!!!!!!");
                 isGrounded = true;
                 velocity.y = 0;
             }

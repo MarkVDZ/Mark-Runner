@@ -128,14 +128,7 @@ public class CollisionManager : MonoBehaviour
             bool resultWall = player.checkOverlap(wall);
             if (resultWall == true)
             {
-                if (PlayerController.canBreakWalls)
-                {
-                    Destroy(wall.gameObject);
-                    walls.Remove(wall);
-                    GetComponent<GameController>().walls.Remove(wall.gameObject);
-                    PlayerController.canBreakWalls = false;
-                    return;
-                }
+                
                 PlayerController controller = player.GetComponent<PlayerController>();
                 Vector3 fix = player.CalculateOverlapFix(wall);
                 if (fix.y != 0)
@@ -152,6 +145,14 @@ public class CollisionManager : MonoBehaviour
                 }
                 else
                 {
+                    if (PlayerController.canBreakWalls)
+                    {
+                        Destroy(wall.gameObject);
+                        walls.Remove(wall);
+                        GetComponent<GameController>().walls.Remove(wall.gameObject);
+                        PlayerController.canBreakWalls = false;
+                        return;
+                    }
                     AudioSource.PlayClipAtPoint(hurt, transform.position);
                     controller.blood.Play();
                     controller.life -= 1;

@@ -371,6 +371,7 @@ MonoBehaviour:
   lava: {fileID: 1769085122426590, guid: 6e4d9f31e6d673e43bedca07b03b070a, type: 2}
   powerup: {fileID: 1849471510602084, guid: 4500edd6e7d5a4d45a410b332c878249, type: 2}
   player: {fileID: 1146264210}
+  walls: []
   powerups: []
   runTime: 0
 --- !u!114 &162334383
@@ -386,6 +387,80 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hurt: {fileID: 8300000, guid: 5147b490670838c41bc283599d548a53, type: 3}
   pickup: {fileID: 8300000, guid: 9a33cec76aa86bf469937ad751058323, type: 3}
+--- !u!1 &283492266
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 283492267}
+  - component: {fileID: 283492269}
+  - component: {fileID: 283492268}
+  m_Layer: 5
+  m_Name: BreakWalls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &283492267
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 283492266}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.9999926, y: 0.99999267, z: 0.9999926}
+  m_Children: []
+  m_Father: {fileID: 1439760122}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -301, y: 33}
+  m_SizeDelta: {x: 160, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &283492268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 283492266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.8901961, g: 1, b: 0.2, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 'BreakWalls:'
+--- !u!222 &283492269
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 283492266}
 --- !u!1 &391935117
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,7 +557,7 @@ RectTransform:
   m_LocalScale: {x: 0.9999926, y: 0.99999267, z: 0.9999926}
   m_Children: []
   m_Father: {fileID: 1439760122}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -501,7 +576,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.671325, g: 0.20544982, b: 0.6985294, a: 0.392}
+  m_Color: {r: 0.6277033, g: 0.9485294, b: 0.90870273, a: 0.392}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -4086,7 +4161,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1439760122}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4341,7 +4416,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 2092032675
+  randomSeed: 1617114785
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -7544,6 +7619,80 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+--- !u!1 &1080283757
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1080283758}
+  - component: {fileID: 1080283760}
+  - component: {fileID: 1080283759}
+  m_Layer: 5
+  m_Name: PowerJump
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1080283758
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1080283757}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.9999926, y: 0.99999267, z: 0.9999926}
+  m_Children: []
+  m_Father: {fileID: 1439760122}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -301, y: 0}
+  m_SizeDelta: {x: 160, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1080283759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1080283757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.8901961, g: 1, b: 0.2, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 'Power Jump:'
+--- !u!222 &1080283760
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1080283757}
 --- !u!1 &1146264206
 GameObject:
   m_ObjectHideFlags: 0
@@ -7650,10 +7799,11 @@ MonoBehaviour:
   godTimer: 0
   iframeTimer: 0
   multiplier: 0
-  stopGravity: 0
   livesText: {fileID: 705207780}
   scoreText: {fileID: 55371721}
   modeText: {fileID: 997579061}
+  breakWallText: {fileID: 283492268}
+  powerJumpText: {fileID: 1080283759}
   vision: {fileID: 391935119}
   visionTime: {fileID: 0}
   deathScreen: {fileID: 922947081}
@@ -7664,8 +7814,13 @@ MonoBehaviour:
   die: {fileID: 8300000, guid: 12e2a1151615c8541b3bd05581733074, type: 3}
   isGrounded: 0
   jumpTime: 0.75
+  baseGravityScale: 0.8
   torch: {fileID: 29821307}
   timeFreezeTimer: 0
+  powerJumpTimer: 0
+  difficulty: 0
+  slideSpeed: 0
+  moveSpeed: 7
 --- !u!1 &1209077538
 GameObject:
   m_ObjectHideFlags: 0
@@ -7792,7 +7947,7 @@ AudioSource:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1369994067}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300002, guid: 6dd7d318c10106943a3bc92cbe490b0f,
     type: 2}
@@ -7956,6 +8111,8 @@ RectTransform:
   - {fileID: 55371720}
   - {fileID: 391935118}
   - {fileID: 997579060}
+  - {fileID: 1080283758}
+  - {fileID: 283492267}
   - {fileID: 922947080}
   - {fileID: 416022405}
   m_Father: {fileID: 0}

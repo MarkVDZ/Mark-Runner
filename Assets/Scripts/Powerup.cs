@@ -54,6 +54,18 @@ public class Powerup : MonoBehaviour
     /// God Mode powerup material
     /// </summary>
     public Material godMat;
+    /// <summary>
+    /// Life powerup material
+    /// </summary>
+    public Material breakMat;
+    /// <summary>
+    /// Move reset powerup material
+    /// </summary>
+    public Material jumpMat;
+    /// <summary>
+    /// God Mode powerup material
+    /// </summary>
+    public Material freezeMat;
 
     // Use this for initialization
     /// <summary>
@@ -61,7 +73,7 @@ public class Powerup : MonoBehaviour
     /// </summary>
     void Start()
     {
-        int powerPick = Random.Range(1, 11);
+        int powerPick = Random.Range(1, 16);
         //print(powerPick);
         switch (powerPick)
         {
@@ -102,8 +114,29 @@ public class Powerup : MonoBehaviour
                 GetComponent<MeshRenderer>().material = lifeMat;
                 break;
             case 10:
+                //isGodPowerup = true;
                 isGodPowerup = true;
                 GetComponent<MeshRenderer>().material = godMat;
+                break;
+            case 11:
+                isPowerJump = true;
+                GetComponent<MeshRenderer>().material = jumpMat;
+                break;
+            case 12:
+                isWallBreaker = true;
+                GetComponent<MeshRenderer>().material = breakMat;
+                break;
+            case 13:
+                isFreezeTime = true;
+                GetComponent<MeshRenderer>().material = freezeMat;
+                break;
+            case 14:
+                isWallBreaker = true;
+                GetComponent<MeshRenderer>().material = breakMat;
+                break;
+            case 15:
+                isPowerJump = true;
+                GetComponent<MeshRenderer>().material = jumpMat;
                 break;
             default:
                 break;
@@ -149,7 +182,7 @@ public class Powerup : MonoBehaviour
     /// </summary>
     void resetPlayerMovement()
     {
-        print("RESET MOVE!");
+        //print("RESET MOVE!");
         if (player.addedMoveDelay > 0)
         {
             player.addedMoveDelay = 0;
@@ -162,7 +195,7 @@ public class Powerup : MonoBehaviour
     /// </summary>
     void extraLife()
     {
-        print("Gain LIFE!");
+        //print("Gain LIFE!");
         if (player.life < 1)
         {
             player.life += 1;
@@ -174,7 +207,7 @@ public class Powerup : MonoBehaviour
     /// </summary>
     void godMode()
     {
-        print("ARE GOD!");
+        //print("ARE GOD!");
         PlayerController.isGod = true;
         player.godTimer = 6;
         canRemove = true;
@@ -184,7 +217,7 @@ public class Powerup : MonoBehaviour
     /// </summary>
     void PowerJump()
     {
-        print("Power Jump!");
+        //print("Power Jump!");
         PlayerController.canPowerJump = true;
         player.powerJumpTimer = 6;
         canRemove = true;
@@ -194,7 +227,7 @@ public class Powerup : MonoBehaviour
     /// </summary>
     void WallBreaker()
     {
-        print("Wall Break active!");
+        //print("Wall Break active!");
         PlayerController.canBreakWalls = true;
         canRemove = true;
     }
@@ -203,9 +236,11 @@ public class Powerup : MonoBehaviour
     /// </summary>
     void FreezeTime()
     {
-        print("STOP TIME!");
+        //print("STOP TIME!");
         PlayerController.isTimeStopped = true;
         player.timeFreezeTimer = 2;
+        PlayerController.isGod = true;
+        player.godTimer = 2;
         canRemove = true;
     }
 }

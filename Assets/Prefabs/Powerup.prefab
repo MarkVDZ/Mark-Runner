@@ -109,7 +109,13 @@ MonoBehaviour:
   isLife: 0
   isGodPowerup: 0
   isResetPowerup: 0
+  isPowerJump: 0
+  isWallBreaker: 0
+  isFreezeTime: 0
   canRemove: 0
   lifeMat: {fileID: 2100000, guid: e9a9785c6b8650749865ae91b006f9b5, type: 2}
   resetMat: {fileID: 2100000, guid: 2e0c950cef548664eb6b196cd1b7b4d4, type: 2}
   godMat: {fileID: 2100000, guid: 095f1cfd07018ec459f4fb43b9a6fe1f, type: 2}
+  breakMat: {fileID: 2100000, guid: 93f616007f1f6534383283fabf862294, type: 2}
+  jumpMat: {fileID: 2100000, guid: 98b41e3edde764b4aa2b7c6893879893, type: 2}
+  freezeMat: {fileID: 2100000, guid: 14d8e8448db39a641bf6f95c5f156feb, type: 2}
